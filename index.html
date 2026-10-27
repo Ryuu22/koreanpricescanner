@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Riftbound KR Prices</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <h1>Riftbound KR Prices</h1>
+      <p class="meta" id="meta"></p>
+    </div>
+    <div class="controls">
+      <input id="q" type="search" placeholder="카드명, 챔피언, 코드 검색 (e.g. 징크스, Jinx, OGN-301)" autocomplete="off" autofocus>
+      <select id="set"><option value="">모든 세트</option></select>
+      <select id="rarity"><option value="">모든 희귀도</option></select>
+      <select id="type"><option value="">모든 유형</option></select>
+      <select id="sort">
+        <option value="code">코드순</option>
+        <option value="price_desc">시세 높은순</option>
+        <option value="price_asc">시세 낮은순</option>
+        <option value="listings">매물 많은순</option>
+        <option value="name">이름순</option>
+      </select>
+      <label class="check"><input id="priced" type="checkbox"> 시세 있는 카드만</label>
+    </div>
+  </header>
+
+  <main>
+    <p class="count" id="count"></p>
+    <div class="grid" id="grid"></div>
+    <div id="sentinel"></div>
+  </main>
+
+  <dialog id="detail">
+    <button class="close" id="close" aria-label="닫기">×</button>
+    <div id="detail-body"></div>
+  </dialog>
+
+  <script src="data/cards.js"></script>
+  <script src="data/prices.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
