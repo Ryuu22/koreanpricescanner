@@ -2,7 +2,7 @@
 
 A searchable catalog of every Riftbound card, with asking prices from Korean secondhand markets.
 
-- **Website**: plain HTML/CSS/JS. Open `index.html` directly in a browser. No server and no build step.
+- **Website**: plain HTML/CSS/JS, in English and Korean (toggle at the top right; `?lang=en` / `?lang=ko` in links). Open `index.html` directly in a browser. No server and no build step.
 - **Data**: two Python scripts (standard library only) refresh the data files the page reads.
 
 ## Update the data

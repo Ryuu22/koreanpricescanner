@@ -45,6 +45,14 @@ body {
 h1 { margin: 0; font-size: 20px; letter-spacing: -0.01em; }
 h1::before { content: "◆ "; color: var(--accent); }
 .meta { margin: 0; color: var(--muted); font-size: 13px; }
+.lang {
+  margin-left: auto;
+  font: inherit; font-size: 13px; color: inherit;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 99px;
+  padding: 5px 12px; cursor: pointer;
+}
+.lang:hover { border-color: var(--accent); }
+.alt-name { margin: -2px 0 4px; }
 
 .controls { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; align-items: center; }
 .controls input[type=search] { flex: 1 1 280px; }

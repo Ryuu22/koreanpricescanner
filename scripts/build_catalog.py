@@ -2,7 +2,7 @@
 """Build the Riftbound card catalog and download card images.
 
 Source: the official card gallery (riftbound.leagueoflegends.com), which embeds
-every card as JSON. Champion names are translated to Korean with Riot's Data
+every card as JSON. The ko-kr page gives Korean names/images, en-us English names. Champion names are translated to Korean with Riot's Data
 Dragon so Korean listings ("징크스", "아리") can be matched later.
 
 Output:
@@ -21,7 +21,7 @@ import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-GALLERY = "https://riftbound.leagueoflegends.com/ko-kr/card-gallery/"
+GALLERY = "https://riftbound.leagueoflegends.com/{locale}/card-gallery/"
 DDRAGON = "https://ddragon.leagueoflegends.com"
 UA = "koreanpricescanner/0.1 (personal price research)"
 IMG_PARAMS = "w=360&fm=webp&q=80"
@@ -31,6 +31,13 @@ def get(url):
     req = urllib.request.Request(url, headers={"User-Agent": UA})
     with urllib.request.urlopen(req, timeout=60) as r:
         return r.read()
+
+
+def gallery_items(locale):
+    html = get(GALLERY.format(locale=locale)).decode("utf8")
+    next_data = re.search(r'<script id="__NEXT_DATA__"[^>]*>(.*?)</script>', html, re.S).group(1)
+    blades = json.loads(next_data)["props"]["pageProps"]["page"]["blades"]
+    return next(b["cards"]["items"] for b in blades if "cards" in b)
 
 
 def champion_names_ko():
@@ -47,7 +54,7 @@ def parse_code(code):
     return (m.group(1), m.group(2), m.group(3)) if m else (code, "", "")
 
 
-def card_record(item, champs_ko):
+def card_record(item, en, champs_ko):
     set_id, number, suffix = parse_code(item["publicCode"])
     tags = (item.get("tags") or {}).get("tags", [])
     champs = [t for t in tags if t in champs_ko]
@@ -57,12 +64,15 @@ def card_record(item, champs_ko):
         "code": item["publicCode"],
         "set": set_id,
         "setName": item["set"]["value"]["label"],
+        "setNameEn": en["set"]["value"]["label"],
         "num": number,
         "variant": {"a": "alt", "*": "signature"}.get(suffix, ""),
         "name": item["name"],
+        "nameEn": en["name"],
         "type": (item["cardType"].get("type") or [{"id": ""}])[0]["id"],
         "rarity": rarity["id"],
         "rarityKo": rarity["label"],
+        "rarityEn": en["rarity"]["value"]["label"],
         "domains": [d["id"] for d in (item.get("domain") or {}).get("values", [])],
         "champs": champs,
         "champsKo": [champs_ko[c] for c in champs],
@@ -83,12 +93,10 @@ def download_image(card):
 
 
 def main():
-    html = get(GALLERY).decode("utf8")
-    next_data = re.search(r'<script id="__NEXT_DATA__"[^>]*>(.*?)</script>', html, re.S).group(1)
-    blades = json.loads(next_data)["props"]["pageProps"]["page"]["blades"]
-    items = next(b["cards"]["items"] for b in blades if "cards" in b)
+    items = gallery_items("ko-kr")
+    english = {i["id"]: i for i in gallery_items("en-us")}
     champs_ko = champion_names_ko()
-    cards = [card_record(i, champs_ko) for i in items]
+    cards = [card_record(i, english.get(i["id"], i), champs_ko) for i in items]
     cards.sort(key=lambda c: (c["set"], c["code"]))
     print(f"{len(cards)} cards")
 

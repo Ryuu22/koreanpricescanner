@@ -11,20 +11,21 @@
     <div class="brand">
       <h1>Riftbound KR Prices</h1>
       <p class="meta" id="meta"></p>
+      <button class="lang" id="lang" type="button"></button>
     </div>
     <div class="controls">
-      <input id="q" type="search" placeholder="카드명, 챔피언, 코드 검색 (e.g. 징크스, Jinx, OGN-301)" autocomplete="off" autofocus>
-      <select id="set"><option value="">모든 세트</option></select>
-      <select id="rarity"><option value="">모든 희귀도</option></select>
-      <select id="type"><option value="">모든 유형</option></select>
+      <input id="q" type="search" autocomplete="off" autofocus>
+      <select id="set"><option value="" data-i18n="allSets"></option></select>
+      <select id="rarity"><option value="" data-i18n="allRarities"></option></select>
+      <select id="type"><option value="" data-i18n="allTypes"></option></select>
       <select id="sort">
-        <option value="code">코드순</option>
-        <option value="price_desc">시세 높은순</option>
-        <option value="price_asc">시세 낮은순</option>
-        <option value="listings">매물 많은순</option>
-        <option value="name">이름순</option>
+        <option value="code" data-i18n="sortCode"></option>
+        <option value="price_desc" data-i18n="sortPriceDesc"></option>
+        <option value="price_asc" data-i18n="sortPriceAsc"></option>
+        <option value="listings" data-i18n="sortListings"></option>
+        <option value="name" data-i18n="sortName"></option>
       </select>
-      <label class="check"><input id="priced" type="checkbox"> 시세 있는 카드만</label>
+      <label class="check"><input id="priced" type="checkbox"> <span data-i18n="pricedOnly"></span></label>
     </div>
   </header>
 
@@ -35,7 +36,7 @@
   </main>
 
   <dialog id="detail">
-    <button class="close" id="close" aria-label="닫기">×</button>
+    <button class="close" id="close">×</button>
     <div id="detail-body"></div>
   </dialog>
 
