@@ -31,7 +31,7 @@ deploy)
     echo "Deployed: https://riftbound.card-cafe.com"
     ;;
 refresh)
-    ssh "$HOST" "sudo systemctl start riftbound-prices.service; sudo journalctl --no-pager -u riftbound-prices.service -n 3"
+    ssh "$HOST" "sudo systemctl start riftbound-prices.service; sudo journalctl --no-pager -u riftbound-prices.service -u riftbound-catalog.service -n 4"
     ;;
 logs)
     ssh "$HOST" "sudo journalctl --no-pager -u riftbound-prices.service -u riftbound-catalog.service -n 40"
