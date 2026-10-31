@@ -7,3 +7,4 @@ set/
 data/seen.json
 products/
 movers/
+.claude/settings.local.json
