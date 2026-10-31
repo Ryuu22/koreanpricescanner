@@ -53,10 +53,11 @@ def chart(points):
     W, H, PAD = 600, 150, 6
     vals = [m for _, m in points]
     lo, hi = min(vals), max(vals)
-    span = (hi - lo) or 1
+    span = hi - lo
     days = [datetime.date.fromisoformat(d).toordinal() for d, _ in points]
     dspan = (days[-1] - days[0]) or 1
-    xy = [(PAD + (d - days[0]) / dspan * (W - 2 * PAD), PAD + (1 - (m - lo) / span) * (H - 2 * PAD))
+    # A price that never changed is drawn across the middle.
+    xy = [(PAD + (d - days[0]) / dspan * (W - 2 * PAD), PAD + (1 - (m - lo) / span) * (H - 2 * PAD) if span else H / 2)
           for d, (_, m) in zip(days, points)]
     line = " ".join(f"{x:.1f},{y:.1f}" for x, y in xy)
     dots = "".join(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3"><title>{d}: {won(m)}</title></circle>'

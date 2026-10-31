@@ -277,11 +277,12 @@
     }
     const W = 600, HT = 150, PAD = 6;
     const vals = pts.map((p) => p.median);
-    const lo = Math.min(...vals), hi = Math.max(...vals), span = hi - lo || 1;
+    const lo = Math.min(...vals), hi = Math.max(...vals), span = hi - lo;
     const day = (d) => Date.parse(d) / 864e5;
     const d0 = day(pts[0].date), dspan = day(pts[pts.length - 1].date) - d0 || 1;
     const x = (p) => (PAD + (day(p.date) - d0) / dspan * (W - 2 * PAD)).toFixed(1);
-    const y = (p) => (PAD + (1 - (p.median - lo) / span) * (HT - 2 * PAD)).toFixed(1);
+    // A price that never changed is drawn across the middle.
+    const y = (p) => (span ? PAD + (1 - (p.median - lo) / span) * (HT - 2 * PAD) : HT / 2).toFixed(1);
     const line = pts.map((p) => `${x(p)},${y(p)}`).join(" ");
     const dots = pts.map((p) =>
       `<circle cx="${x(p)}" cy="${y(p)}" r="3"><title>${esc(p.date)}: ${won(p.median)}</title></circle>`).join("");
