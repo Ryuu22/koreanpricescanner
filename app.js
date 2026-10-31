@@ -7,6 +7,9 @@
   const CARDS = window.CARDS || [];
   const PRICES = window.PRICES || { bunjang: {} };
   const BJ = PRICES.bunjang || {};
+  const SOLD = PRICES.sold || {};
+  const BUNDLES = PRICES.bundles || {};
+  const IN_BUNDLES = PRICES.inBundles || {};
   const PAGE = 120;
   const STALE_HOURS = 24;
 
@@ -29,7 +32,7 @@
       variants: { alt: "대체 일러스트", signature: "시그니처" },
       artist: "일러스트", bunjang: "번개장터", updated: "업데이트",
       median: "중간값", min: "최저", max: "최고", count2: "매물",
-      priceNote: "판매 중인 매물의 호가 기준 (그레이딩 카드는 통계에서 제외). 제목에 카드 코드가 있는 매물만 매칭됩니다.",
+      priceNote: "판매 중인 매물의 호가 기준. 구매글·일괄 매물·그레이딩 카드는 통계에서 제외합니다.",
       noListings: "매칭된 매물이 없습니다.",
       graded: "그레이딩",
       searchBunjang: "번개장터에서 검색 ↗",
@@ -42,6 +45,13 @@
       historyShort: (d) => `${d}부터 시세를 기록하고 있습니다. 며칠 뒤에 추이를 볼 수 있습니다.`,
       chg7: "7일 변동",
       privacy: "개인정보처리방침",
+      sold: "최근 거래 추정가",
+      soldNote: (n) => `최근 30일 동안 목록에서 사라진 매물 ${n}건의 마지막 가격 (판매된 것으로 추정)`,
+      bundlesTitle: "이 카드가 포함된 일괄·묶음 매물",
+      bundlesNote: "여러 장을 함께 파는 매물이라 시세 통계에는 넣지 않습니다.",
+      outlier: "통계 제외 (다른 매물과 가격 차이가 큼)",
+      watchAdd: "☆ 관심 카드에 추가", watchRemove: "★ 관심 카드", watchedOnly: "★ 관심 카드만",
+      navProducts: "미개봉 상품 시세", navMovers: "급등·급락", navCalc: "덱 가격 계산기", navAbout: "시세 안내",
       disclaimer: "Riftbound KR Prices는 Riot Games의 보증을 받지 않았으며, Riot Games 또는 Riot Games 자산의 제작·관리에 공식적으로 관여하는 누구의 견해나 의견도 반영하지 않습니다. Riot Games 및 관련 모든 자산은 Riot Games, Inc.의 상표 또는 등록 상표입니다. 번개장터·KREAM과 제휴 관계가 없습니다.",
     },
     en: {
@@ -59,7 +69,7 @@
       variants: { alt: "Alternate art", signature: "Signature" },
       artist: "Artist", bunjang: "Bunjang (번개장터)", updated: "Updated",
       median: "Median", min: "Lowest", max: "Highest", count2: "Listings",
-      priceNote: "Asking prices of listings currently for sale (graded cards excluded from stats). Only listings with the card code in the title are matched. Prices in Korean won.",
+      priceNote: "Asking prices of listings currently for sale, in Korean won. Buying posts, bundles and graded cards are left out of the stats.",
       noListings: "No matching listings.",
       graded: "Graded",
       searchBunjang: "Search on Bunjang ↗",
@@ -72,6 +82,13 @@
       historyShort: (d) => `Price history is recorded since ${d}. Check back in a few days for a trend.`,
       chg7: "7-day change",
       privacy: "Privacy policy",
+      sold: "Estimated sold price",
+      soldNote: (n) => `Last price of ${n} listings that disappeared in the last 30 days (probably sold)`,
+      bundlesTitle: "Bundles and lots with this card",
+      bundlesNote: "Several cards sold together, so they're not counted in the stats.",
+      outlier: "Not in stats (far from the other prices)",
+      watchAdd: "☆ Add to watchlist", watchRemove: "★ On watchlist", watchedOnly: "★ Watchlist only",
+      navProducts: "Sealed products", navMovers: "Price movers", navCalc: "Deck calculator", navAbout: "How prices work",
       disclaimer: "Riftbound KR Prices isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc. Not affiliated with Bunjang or KREAM.",
     },
   };
@@ -105,9 +122,20 @@
     c._price = BJ[c.id] ? BJ[c.id].median : null;
   }
 
+  // Watchlist: card ids, kept in this browser only.
+  const watched = new Set(readWatch());
+  function readWatch() {
+    try { return JSON.parse(localStorage.getItem("watch") || "[]"); } catch (_) { return []; }
+  }
+  function toggleWatch(id) {
+    if (watched.has(id)) watched.delete(id); else watched.add(id);
+    try { localStorage.setItem("watch", JSON.stringify([...watched])); } catch (_) { /* storage blocked */ }
+  }
+
   // Restore state from URL
   for (const k of ["q", "sort"]) if (params.has(k)) $(k).value = params.get(k);
   $("priced").checked = params.get("priced") === "1";
+  $("watched").checked = params.get("watched") === "1";
 
   let openCard = "";
   let results = [];
@@ -145,12 +173,14 @@
     const terms = $("q").value.trim().split(/\s+/).map(norm).filter(Boolean);
     const set = $("set").value, rarity = $("rarity").value, type = $("type").value;
     const priced = $("priced").checked;
+    const onlyWatched = $("watched").checked;
 
     results = CARDS.filter((c) =>
       (!set || c.set === set) &&
       (!rarity || c.rarity === rarity) &&
       (!type || c.type === type) &&
       (!priced || c._price !== null) &&
+      (!onlyWatched || watched.has(c.id)) &&
       terms.every((term) => c._search.includes(term)));
 
     const sort = $("sort").value;
@@ -181,7 +211,7 @@
     el.className = "card";
     el.innerHTML = `
       <img src="${c.img}" alt="${esc(nameOf(c))}" loading="lazy" width="744" height="1039">
-      <div class="name">${esc(nameOf(c))}</div>
+      <div class="name">${watched.has(c.id) ? '<span class="star">★</span> ' : ""}${esc(nameOf(c))}</div>
       <div class="sub"><span>${esc(c.code)}</span><span class="rar ${c.rarity}">${esc(rarityOf(c))}</span></div>
       ${p ? `<div class="sub"><span class="price">${won(p.median)}${p.chg7 ? " " + pct(p.chg7) : ""}</span><span>${t.listings(p.n)}</span></div>`
           : `<div class="price none">${t.noPrice}</div>`}`;
@@ -198,7 +228,7 @@
     const champs = champsOf(c);
 
     const rows = p ? p.listings.map((l) => `
-      <tr>
+      <tr${l.outlier ? ` class="outlier" title="${t.outlier}"` : ""}>
         <td>${l.thumb ? `<img src="${esc(l.thumb)}" alt="" loading="lazy">` : ""}</td>
         <td>
           ${l.lang ? `<span class="tag ${l.lang === "KR" ? "kr" : ""}">${l.lang}</span>` : ""}
@@ -213,6 +243,7 @@
         <div><img src="${c.img}" alt="${esc(nameOf(c))}"></div>
         <div>
           <h2>${esc(nameOf(c))}</h2>
+          <button class="watch" id="watch" type="button">${watched.has(c.id) ? t.watchRemove : t.watchAdd}</button>
           ${lang === "en" && c.name !== c.nameEn ? `<p class="facts alt-name">${esc(c.name)}</p>` : ""}
           <p class="facts">
             ${esc(c.code)} · ${esc(setNameOf(c))} · <span class="rar ${c.rarity}">${esc(rarityOf(c))}</span>
@@ -232,9 +263,11 @@
             </div>
             ${p.chg7 != null ? `<p class="note">${t.chg7}: ${p.chg7 ? pct(p.chg7) : "0%"}</p>` : ""}
             <div class="hist" id="hist"><h3>${t.history}</h3><p class="note">${t.historyLoading}</p></div>
-            <p class="note">${t.priceNote}</p>
+            <p class="note">${t.priceNote} <a href="about.html">${t.navAbout}</a></p>
             <table>${rows}</table>`
           : `<p class="note">${t.noListings}</p>`}
+          ${soldBlock(c.id)}
+          ${bundleBlock(c.id)}
           <div class="links"><a href="${bjSearch}" target="_blank" rel="noopener">${t.searchBunjang}</a></div>
 
           <div class="src"><h3>KREAM</h3></div>
@@ -242,10 +275,32 @@
           <div class="links"><a href="${kreamSearch}" target="_blank" rel="noopener">${t.searchKream}</a></div>
         </div>
       </div>`;
+    $("watch").addEventListener("click", () => {
+      toggleWatch(c.id);
+      $("watch").textContent = watched.has(c.id) ? t.watchRemove : t.watchAdd;
+      if ($("watched").checked) apply();
+    });
     if (!$("detail").open) $("detail").showModal();
     openCard = c.id;
     saveState();
     if (p) loadHistory(() => { if (openCard === c.id) drawHistory(c.id); });
+  }
+
+  function soldBlock(id) {
+    const s = SOLD[id];
+    if (!s) return "";
+    return `<div class="soldbox"><b>${won(s.median)}</b> ${t.sold}<p class="note">${t.soldNote(s.n)}</p></div>`;
+  }
+
+  function bundleBlock(id) {
+    const ls = (IN_BUNDLES[id] || []).map((pid) => BUNDLES[pid]).filter(Boolean);
+    if (!ls.length) return "";
+    return `<h3 class="sub3">${t.bundlesTitle}</h3><p class="note">${t.bundlesNote}</p><table>${ls.map((l) => `
+      <tr>
+        <td>${l.thumb ? `<img src="${esc(l.thumb)}" alt="" loading="lazy">` : ""}</td>
+        <td><a href="https://m.bunjang.co.kr/products/${l.pid}" target="_blank" rel="noopener">${esc(l.title)}</a></td>
+        <td class="p">${won(l.price)}</td>
+      </tr>`).join("")}</table>`;
   }
 
   // history.js is only needed in the detail view, so it's loaded on first use
@@ -314,6 +369,7 @@
     for (const k of ["q", "set", "rarity", "type"]) if ($(k).value) p.set(k, $(k).value);
     if ($("sort").value !== "code") p.set("sort", $("sort").value);
     if ($("priced").checked) p.set("priced", "1");
+    if ($("watched").checked) p.set("watched", "1");
     if (openCard) p.set("card", openCard);
     p.set("lang", lang);
     try { history.replaceState(null, "", `?${p}`); } catch (_) { /* file:// in some browsers */ }
@@ -331,7 +387,7 @@
 
   let timer;
   $("q").addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(apply, 120); });
-  for (const id of ["set", "rarity", "type", "sort", "priced"]) $(id).addEventListener("change", apply);
+  for (const id of ["set", "rarity", "type", "sort", "priced", "watched"]) $(id).addEventListener("change", apply);
   $("lang").addEventListener("click", () => setLang(lang === "ko" ? "en" : "ko"));
   $("close").addEventListener("click", () => $("detail").close());
   $("detail").addEventListener("close", () => { openCard = ""; saveState(); });

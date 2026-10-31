@@ -1,0 +1,9 @@
+[Unit]
+Description=Daily Riftbound data backup
+
+[Timer]
+OnCalendar=*-*-* 15:37:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target

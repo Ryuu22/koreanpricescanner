@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>시세 안내 · How prices work · Riftbound KR Prices</title>
+  <meta name="description" content="Riftbound KR Prices의 리프트바운드 카드 시세가 어떻게 계산되는지: 번개장터 매물 수집, 카드 매칭, 중간값, 최근 거래 추정가, 미개봉 상품, 시세 추이.">
+  <link rel="canonical" href="https://riftbound.card-cafe.com/about.html">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand"><a class="site" href="./">Riftbound KR Prices</a></div>
+    <nav class="nav"><a href="products/">미개봉 상품 시세</a><a href="movers/">급등·급락</a><a href="calc.html">덱 가격 계산기</a><a href="about.html">시세 안내</a></nav>
+  </header>
+
+  <main class="doc">
+    <h1>시세는 이렇게 계산합니다</h1>
+    <p>이 사이트의 가격은 번개장터에 올라온 매물을 자동으로 모아 계산합니다. 실제 거래 가격이 아니라 <strong>판매자가 부른 가격(호가)</strong>이 기준이며, 사라진 매물로 추정한 거래 가격을 함께 보여줍니다.</p>
+
+    <h2>1. 매물 수집</h2>
+    <p>6시간마다 번개장터에서 "리프트바운드"와 "riftbound"로 검색되는 판매 중인 매물을 모두 읽습니다 (보통 2,500~3,000건). 카드 목록과 이미지는 라이엇 게임즈의 공식 카드 갤러리에서 매일 가져옵니다. KREAM은 자동 수집을 막고 있어 검색 링크만 제공합니다.</p>
+
+    <h2>2. 매물을 카드에 연결하기</h2>
+    <p>매물 제목만 보고 어떤 카드인지 판단합니다.</p>
+    <ul>
+      <li><strong>카드 코드</strong>가 있으면 그대로 연결합니다: <code>OGN-301</code>, <code>301/298</code>, <code>오리진 301</code>, <code>039a</code>(알트), <code>305*</code>(시그니처).</li>
+      <li>코드가 없으면 <strong>카드 이름</strong>으로 찾습니다 ("뻔뻔한 해적", "웅장한책략"처럼 띄어쓰기가 달라도 됩니다). 같은 이름의 카드가 여러 버전이면 제목의 "알트·얼터", "시그니처·사인", "오버넘버"로 구분하고, 표시가 없으면 일반 버전으로 봅니다. 여러 세트에 같은 이름이 있으면 세트 이름이 있어야 연결합니다.</li>
+      <li>챔피언 이름만 있는 제목("징크스 카드")은 어떤 카드인지 알 수 없어 연결하지 않습니다. 프로모 카드도 일반 카드와 다른 카드이므로 연결하지 않습니다.</li>
+    </ul>
+
+    <h2>3. 시세에서 빠지는 매물</h2>
+    <ul>
+      <li><strong>구매글</strong> ("삽니다", "[구매]", "매입"): 사려는 사람이 제시한 가격이라 제외합니다.</li>
+      <li><strong>일괄·묶음 매물</strong>: 여러 카드를 함께 팔거나("일괄", "덱소스", "완덱"), 같은 카드를 여러 장 파는데 "장당" 가격이 아닌 경우입니다. 시세에는 넣지 않고 카드 페이지의 "일괄·묶음 매물"에 따로 보여줍니다.</li>
+      <li><strong>그레이딩 카드</strong> (PSA, BGS, BRG 등): 목록에는 보이지만 통계에서는 뺍니다.</li>
+      <li><strong>동떨어진 가격</strong>: 매물이 4건 이상이면 중간값의 1/4 미만이거나 4배를 넘는 가격은 통계에서 빼고, 목록에서 흐리게 표시합니다. 장난 가격(1억 원)이나 실수를 걸러내기 위해서입니다.</li>
+      <li>500원 미만 매물.</li>
+    </ul>
+
+    <h2>4. 숫자의 의미</h2>
+    <ul>
+      <li><strong>중간값</strong>: 매물 가격을 줄 세웠을 때 가운데 가격입니다. 평균과 달리 터무니없이 비싼 매물 하나에 크게 흔들리지 않아 대표 시세로 씁니다.</li>
+      <li><strong>최저 / 최고</strong>: 지금 살 수 있는 가장 싼 가격과 가장 비싼 가격입니다.</li>
+      <li><strong>매물</strong>: 연결된 판매 매물 수입니다. 매물이 1~2건뿐이면 시세가 그 판매자의 호가일 뿐이니 참고만 하세요.</li>
+      <li>한글판·영문판 표시는 제목에서 찾아 태그로 보여주지만, 시세는 함께 계산합니다. 포일·논포일도 구분하지 않습니다.</li>
+    </ul>
+
+    <h2 id="sold">5. 최근 거래 추정가</h2>
+    <p>번개장터는 거래 완료 가격을 공개하지 않습니다. 대신 지난 업데이트 때 있던 매물이 이번에 사라지면 <strong>판매되었을 가능성이 높다</strong>고 보고 마지막 가격을 기록합니다. 최근 30일 동안 사라진 매물 가격의 중간값이 "최근 거래 추정가"입니다.</p>
+    <p>판매자가 매물을 지우거나 다시 올린 경우도 섞이므로 정확한 거래가는 아니지만, 호가보다 실제 거래에 가까운 경우가 많습니다. 기록은 2026년 10월 31일부터 쌓이고 있습니다.</p>
+
+    <h2 id="sealed">6. 미개봉 상품</h2>
+    <p>T1 시그니처 에디션, T1 플레이어 번들, K/DA 쿠튀르 컬렉션, 오리진 부스터 박스(14팩)·카톤, 증명의 전장, MSI 프로모, 넥서스 나이트 프로모 팩은 <a href="products/">미개봉 상품 시세</a>에서 따로 계산합니다. 개봉품, 빈 박스·케이스, 상품에서 나온 낱장 카드, 여러 개를 함께 파는 매물은 제외합니다.</p>
+
+    <h2>7. 시세 추이와 7일 변동</h2>
+    <p>하루에 한 번 각 카드의 중간값과 최저가를 기록해 그래프로 보여줍니다 (그날 마지막 업데이트 기준). "7일 변동"은 지금 중간값을 7일 이상 전 기록과 비교한 값이며, <a href="movers/">급등·급락</a>에서 변동이 큰 카드를 볼 수 있습니다.</p>
+
+    <h2>8. 한계</h2>
+    <p>제목만 보고 판단하므로 잘못 연결되거나 빠지는 매물이 있을 수 있습니다. 가격은 참고용이며, 거래 전에는 반드시 실제 매물을 확인하세요. 잘못된 시세를 발견하면 <a href="mailto:dan@torchsmith.com">dan@torchsmith.com</a>으로 알려주세요.</p>
+
+    <hr>
+
+    <div lang="en">
+      <h2>How prices work</h2>
+      <p>Every 6 hours the site reads every Bunjang (번개장터) listing for "리프트바운드" and "riftbound" that is for sale, and matches each title to a card: by its collector code (<code>OGN-301</code>, <code>301/298</code>), or else by the card's name, using words like "알트" (alt art), "시그니처" (signature) and "오버넘버" (overnumber) to pick the version. Champion names alone and promo cards aren't matched.</p>
+      <p>Left out of the stats: buying posts, bundles and multi-copy lots (shown separately on each card), graded cards, and, with 4+ listings, prices under a quarter or over 4× the median. The <strong>median</strong> asking price is the headline price because one silly listing can't move it much.</p>
+      <p><strong>Estimated sold price:</strong> Bunjang doesn't publish sale prices. A matched listing that disappears between updates was probably sold, so its last price is recorded; the estimate is the median of those over the last 30 days. Some disappeared listings were deleted rather than sold, so treat it as a guide.</p>
+      <p><strong>Sealed products</strong> (T1 Signature Edition, Origins boxes and cartons, K/DA Couture and more) have their own page, excluding opened boxes, empty boxes and lots. Price history records one point per day; the 7-day change compares today's median with the record from at least 7 days ago.</p>
+      <p>Matching is based on titles only, so some listings will be missed or misplaced. Always check the actual listing before buying.</p>
+    </div>
+  </main>
+  <footer class="foot">
+    <p><a href="privacy.html">개인정보처리방침 · Privacy</a> · <a href="mailto:dan@torchsmith.com">dan@torchsmith.com</a></p>
+  </footer>
+</body>
+</html>

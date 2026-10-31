@@ -1,0 +1,15 @@
+[Unit]
+Description=Back up Riftbound price history to GitHub (data-backup branch)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=@DEPLOY_USER@
+ExecStart=/bin/bash /srv/riftbound/site/scripts/backup_data.sh
+NoNewPrivileges=yes
+ProtectSystem=strict
+# Reads the deploy key from ~/.ssh
+ProtectHome=read-only
+PrivateTmp=yes
+ReadWritePaths=/srv/riftbound/backup

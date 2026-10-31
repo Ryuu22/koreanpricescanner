@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>덱 가격 계산기 · Deck calculator · Riftbound KR Prices</title>
+  <meta name="description" content="리프트바운드 덱 리스트나 카드 목록을 붙여넣으면 번개장터 시세로 덱 가격을 계산합니다. Paste a Riftbound decklist to price it at Korean market prices.">
+  <link rel="canonical" href="https://riftbound.card-cafe.com/calc.html">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand"><a class="site" href="./">Riftbound KR Prices</a></div>
+    <nav class="nav"><a href="products/">미개봉 상품 시세</a><a href="movers/">급등·급락</a><a href="calc.html">덱 가격 계산기</a><a href="about.html">시세 안내</a></nav>
+  </header>
+
+  <main class="doc calc">
+    <h1 data-i18n="title"></h1>
+    <p data-i18n="intro"></p>
+    <textarea id="list" rows="12" spellcheck="false"></textarea>
+    <div class="links">
+      <button id="fromWatch" type="button" data-i18n="fromWatch"></button>
+      <button id="example" type="button" data-i18n="example"></button>
+    </div>
+    <div id="result"></div>
+  </main>
+
+  <script src="data/cards.js"></script>
+  <script src="data/prices.js"></script>
+  <script src="calc.js"></script>
+</body>
+</html>

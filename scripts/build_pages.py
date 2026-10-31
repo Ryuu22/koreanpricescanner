@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build static pages for search engines: one per card, one per set, plus sitemap.xml.
+"""Build static pages for search engines: per card, per set, sealed products, movers, sitemap.xml.
 
 The main page draws everything with JavaScript, which search engines (Naver especially)
 mostly don't see. These pages have names, codes and current Bunjang prices in plain
@@ -9,6 +9,8 @@ link to each other: home -> set pages -> card pages.
 Output:
   card/<id>/index.html   one page per card
   set/<set>/index.html   one page per set, every card with its price
+  products/index.html    sealed products (T1 Signature Edition, Origins box, ...)
+  movers/index.html      biggest 7-day price changes
   sitemap.xml
   index.html             the set links in its footer (between the <!-- sets --> markers)
 
@@ -108,6 +110,8 @@ def head(title, desc, url, image, extra=""):
   <header class="top">
     <div class="brand"><a class="site" href="/">{BRAND}</a>
       <p class="meta"><a class="home" href="/">리프트바운드 전체 카드 시세 검색 →</a></p></div>
+    <nav class="nav"><a href="/products/">미개봉 상품 시세</a><a href="/movers/">급등·급락</a>
+      <a href="/calc.html">덱 가격 계산기</a><a href="/about.html">시세 안내</a></nav>
   </header>"""
 
 
@@ -115,7 +119,7 @@ def foot(set_links):
     return f"""
   <footer class="foot">
     <p class="sets">세트별 시세: {set_links}</p>
-    <p><a href="/privacy.html">개인정보처리방침</a> · <a href="mailto:{CONTACT}">{CONTACT}</a></p>
+    <p><a href="/about.html">시세 안내</a> · <a href="/privacy.html">개인정보처리방침</a> · <a href="mailto:{CONTACT}">{CONTACT}</a></p>
     <p>{e(DISCLAIMER)}</p>
   </footer>
 </body>
@@ -130,6 +134,39 @@ def breadcrumbs(items):
         {"@type": "ListItem", "position": i + 1, "name": n, **({"item": SITE + u} if u else {})}
         for i, (n, u) in enumerate(items)]}
     return f'<nav class="crumbs">{trail}</nav>', json_ld(data)
+
+
+def listing_rows(listings, tags=True):
+    return "".join(f"""
+          <tr{' class="outlier" title="통계 제외 (다른 매물과 가격 차이가 큼)"' if l.get("outlier") else ""}>
+            <td>{f'<img src="{e(l["thumb"])}" alt="" loading="lazy">' if l.get("thumb") else ""}</td>
+            <td>{f'<span class="tag">{e(l["lang"])}</span>' if tags and l.get("lang") else ""}{'<span class="tag">그레이딩</span>' if l.get("graded") else ""}
+              <a href="https://m.bunjang.co.kr/products/{l['pid']}" rel="nofollow noopener" target="_blank">{e(l['title'])}</a></td>
+            <td class="p">{won(l['price'])}</td>
+          </tr>""" for l in listings)
+
+
+def chg_html(chg):
+    return f'<span class="chg {"up" if chg > 0 else "down"}">{"▲" if chg > 0 else "▼"}{abs(chg)}%</span>'
+
+
+def sold_html(s):
+    if not s:
+        return ""
+    return (f'<div class="soldbox"><b>{won(s["median"])}</b> 최근 거래 추정가'
+            f'<p class="note">최근 30일 동안 목록에서 사라진 매물 {s["n"]}건의 마지막 가격 (판매된 것으로 추정). '
+            f'<a href="/about.html#sold">자세히</a></p></div>')
+
+
+def stats_html(p):
+    return f"""
+      <div class="stats">
+        <div class="stat"><b>{won(p['median'])}</b><span>중간값 · Median</span></div>
+        <div class="stat"><b>{won(p['min'])}</b><span>최저 · Lowest</span></div>
+        <div class="stat"><b>{won(p['max'])}</b><span>최고 · Highest</span></div>
+        <div class="stat"><b>{p['n']}</b><span>매물 · Listings</span></div>
+      </div>
+      {f'<p class="note">7일 변동: {chg_html(p["chg7"])}</p>' if p.get("chg7") else ""}"""
 
 
 def chart(points):
@@ -156,7 +193,7 @@ def chart(points):
       </div>"""
 
 
-def card_page(c, p, updated, history, prev_c, next_c, related, set_name, set_links):
+def card_page(c, p, updated, history, prev_c, next_c, related, set_name, set_links, sold=None, bundles=()):
     code = short_code(c)
     champ = champion(c)
     words = variant_words(c)
@@ -185,28 +222,18 @@ def card_page(c, p, updated, history, prev_c, next_c, related, set_name, set_lin
 
     facts = [c["code"], set_name, rarity, ctype, ", ".join(c.get("champsKo", [])), " · ".join(words)]
     if p:
-        rows = "".join(f"""
-          <tr>
-            <td>{f'<img src="{e(l["thumb"])}" alt="" loading="lazy">' if l.get("thumb") else ""}</td>
-            <td>{f'<span class="tag">{e(l["lang"])}</span>' if l.get("lang") else ""}{'<span class="tag">그레이딩</span>' if l.get("graded") else ""}
-              <a href="https://m.bunjang.co.kr/products/{l['pid']}" rel="nofollow noopener" target="_blank">{e(l['title'])}</a></td>
-            <td class="p">{won(l['price'])}</td>
-          </tr>""" for l in p["listings"])
-        chg = p.get("chg7")
-        prices = f"""
-      <div class="stats">
-        <div class="stat"><b>{won(p['median'])}</b><span>중간값 · Median</span></div>
-        <div class="stat"><b>{won(p['min'])}</b><span>최저 · Lowest</span></div>
-        <div class="stat"><b>{won(p['max'])}</b><span>최고 · Highest</span></div>
-        <div class="stat"><b>{p['n']}</b><span>매물 · Listings</span></div>
-      </div>
-      {f'<p class="note">7일 변동: <span class="chg {"up" if chg > 0 else "down"}">{"▲" if chg > 0 else "▼"}{abs(chg)}%</span></p>' if chg else ""}
-      <p class="note">판매 중인 번개장터 매물의 호가 기준 (그레이딩 카드는 통계에서 제외). {e(updated)} 업데이트.</p>
+        prices = f"""{stats_html(p)}
+      <p class="note">판매 중인 번개장터 매물의 호가 기준 (그레이딩 카드는 통계에서 제외). {e(updated)} 업데이트.
+        <a href="/about.html">시세 계산 방법</a></p>
       {chart(history) if len(history) >= 2 else ""}
       <h2>번개장터 판매 매물</h2>
-      <table>{rows}</table>"""
+      <table>{listing_rows(p["listings"])}</table>"""
     else:
         prices = '<p class="note">현재 번개장터에 매칭된 매물이 없습니다.</p>'
+    prices += sold_html(sold)
+    if bundles:
+        prices += (f'<h2>{e(c["name"])} 포함 일괄·묶음 매물</h2><p class="note">여러 장을 함께 파는 매물이라 시세 통계에는 '
+                   f'넣지 않습니다.</p><table>{listing_rows(bundles, tags=False)}</table>')
 
     nav = " · ".join(
         f'<a href="/card/{x["id"]}/">{arrow} {e(short_code(x))} {e(x["name"])}</a>'
@@ -279,6 +306,66 @@ def set_page(set_id, set_name, set_en, cards, bj, updated, set_links):
   </main>""" + foot(set_links)
 
 
+def products_page(prices, hist, set_links):
+    names = prices.get("productNames", {})
+    products, sold, updated = prices.get("products", {}), prices.get("sold", {}), prices.get("updated", "")
+    title = "리프트바운드 미개봉 상품 시세·가격 | T1 시그니처 에디션, 오리진 부스터 박스, 카톤"
+    desc = ("리프트바운드 미개봉 상품의 번개장터 시세: " + ", ".join(
+        f"{names[pid][0]} {won(products[pid]['median'])}" for pid in names if pid in products) + f". {updated} 업데이트.")
+    sections, index = [], []
+    for pid, (ko, en) in names.items():
+        p = products.get(pid)
+        points = [(d, v[0]) for d, v in zip(hist["dates"], hist["cards"].get(pid, [])) if v]
+        index.append(f'<tr><td><a href="#{pid}">{e(ko)}</a></td><td class="p">{won(p["median"]) if p else "–"}</td>'
+                     f'<td class="p">{p["n"] if p else ""}</td></tr>')
+        body = (stats_html(p) + (chart(points) if len(points) >= 2 else "")
+                + f'<table>{listing_rows(p["listings"])}</table>') if p else '<p class="note">현재 매물이 없습니다.</p>'
+        sections.append(f'<section id="{pid}"><h2>{e(ko)} <span class="en">{e(en)}</span></h2>{body}{sold_html(sold.get(pid))}</section>')
+    crumbs, crumbs_ld = breadcrumbs([("홈", "/"), ("미개봉 상품 시세", None)])
+    return head(title, desc, f"{SITE}/products/", f"{SITE}/og.png", crumbs_ld) + f"""
+  <main class="cardpage setpage">
+    {crumbs}
+    <h1>리프트바운드 미개봉 상품 시세</h1>
+    <p class="about">T1 시그니처 에디션, K/DA 쿠튀르 컬렉션, 오리진 부스터 박스·카톤 등 미개봉 상품의 번개장터 판매 가격입니다.
+      개봉품, 빈 박스, 낱장, 여러 개를 함께 파는 매물과 구매글은 제외하며, 다른 매물과 가격 차이가 큰 매물은 통계에서 뺍니다.
+      {e(updated)} 업데이트. <a href="/about.html#sealed">자세히</a></p>
+    <table class="list"><tr><th>상품</th><th class="p">중간값</th><th class="p">매물</th></tr>{"".join(index)}</table>
+    {"".join(sections)}
+  </main>""" + foot(set_links)
+
+
+def movers_page(cards, prices, hist, set_links):
+    bj, names, products = prices.get("bunjang", {}), prices.get("productNames", {}), prices.get("products", {})
+    rows = [(c, bj[c["id"]]) for c in cards if bj.get(c["id"], {}).get("chg7")]
+    rows += [({"id": pid, "name": names[pid][0], "code": "", "product": True}, st)
+             for pid, st in products.items() if st.get("chg7") and pid in names]
+    up = sorted((r for r in rows if r[1]["chg7"] > 0), key=lambda r: -r[1]["chg7"])[:20]
+    down = sorted((r for r in rows if r[1]["chg7"] < 0), key=lambda r: r[1]["chg7"])[:20]
+
+    def table(rs):
+        return "<table class=\"list\"><tr><th>카드</th><th class=p>7일 변동</th><th class=p>중간값</th><th class=p>매물</th></tr>" + "".join(
+            f'<tr><td><a href="{"/products/#" + c["id"] if c.get("product") else "/card/" + c["id"] + "/"}">'
+            f'{e(short_code(c)) + " " if c["code"] else ""}{e(c["name"])}</a></td><td class="p">{chg_html(st["chg7"])}</td>'
+            f'<td class="p">{won(st["median"])}</td><td class="p">{st["n"]}</td></tr>' for c, st in rs) + "</table>"
+
+    first = hist["dates"][0] if hist["dates"] else datetime.date.today().isoformat()
+    ready = (datetime.date.fromisoformat(first) + datetime.timedelta(days=7)).isoformat()
+    body = (f"<h2>이번 주 급등 카드</h2>{table(up) if up else '<p class=note>없음</p>'}"
+            f"<h2>이번 주 급락 카드</h2>{table(down) if down else '<p class=note>없음</p>'}") if rows else (
+        f'<p class="note">시세 기록이 7일 이상 쌓이면 ({ready}부터) 이곳에 가격 변동이 큰 카드가 표시됩니다.</p>')
+    title = "리프트바운드 카드 시세 급등·급락 | 이번 주 가격 변동 TOP 20"
+    desc = "리프트바운드 카드 중 최근 7일 동안 번개장터 시세(중간값)가 가장 많이 오르고 내린 카드와 미개봉 상품."
+    crumbs, crumbs_ld = breadcrumbs([("홈", "/"), ("급등·급락", None)])
+    return head(title, desc, f"{SITE}/movers/", f"{SITE}/og.png", crumbs_ld) + f"""
+  <main class="cardpage setpage">
+    {crumbs}
+    <h1>리프트바운드 시세 급등·급락</h1>
+    <p class="about">번개장터 매물 호가의 중간값을 7일 전과 비교했습니다. 매물이 적은 카드는 매물 한두 건으로도 크게 움직일 수 있으니
+      매물 수를 함께 확인하세요. {e(prices.get("updated", ""))} 업데이트.</p>
+    {body}
+  </main>""" + foot(set_links)
+
+
 def write(path, text):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path + ".tmp", "w", encoding="utf8") as f:
@@ -323,10 +410,14 @@ def main():
         next_c = cards[i + 1] if i + 1 < len(cards) else None
         write(os.path.join(ROOT, "card", c["id"], "index.html"),
               card_page(c, bj.get(c["id"]), updated, points, prev_c, next_c, related,
-                        set_names[c["set"]], set_links))
+                        set_names[c["set"]], set_links, sold=prices.get("sold", {}).get(c["id"]),
+                        bundles=[prices["bundles"][pid] for pid in prices.get("inBundles", {}).get(c["id"], [])
+                                 if pid in prices.get("bundles", {})]))
     for s, cs in by_set.items():
         write(os.path.join(ROOT, "set", set_slug(s), "index.html"),
               set_page(s, set_names[s], set_en[s], cs, bj, updated, set_links))
+    write(os.path.join(ROOT, "products", "index.html"), products_page(prices, hist, set_links))
+    write(os.path.join(ROOT, "movers", "index.html"), movers_page(cards, prices, hist, set_links))
     prune(os.path.join(ROOT, "card"), {c["id"] for c in cards})
     prune(os.path.join(ROOT, "set"), {set_slug(s) for s in by_set})
 
@@ -338,13 +429,13 @@ def main():
     write(index, text)
 
     day = updated[:10] or datetime.date.today().isoformat()
-    paths = ["/"] + [f"/set/{set_slug(s)}/" for s in by_set] + [f"/card/{c['id']}/" for c in cards]
+    paths = ["/", "/products/", "/movers/", "/about.html", "/calc.html"] + [f"/set/{set_slug(s)}/" for s in by_set] + [f"/card/{c['id']}/" for c in cards]
     write(os.path.join(ROOT, "sitemap.xml"),
           '<?xml version="1.0" encoding="UTF-8"?>\n'
           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
           + "\n".join(f"  <url><loc>{SITE}{p}</loc><lastmod>{day}</lastmod></url>" for p in paths)
           + "\n</urlset>\n")
-    print(f"{len(cards)} card pages, {len(by_set)} set pages, sitemap.xml")
+    print(f"{len(cards)} card pages, {len(by_set)} set pages, products, movers, sitemap.xml")
 
 
 if __name__ == "__main__":

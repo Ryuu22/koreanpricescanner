@@ -4,8 +4,8 @@
 #   deploy/deploy.sh setup      # uploads this folder and runs it with sudo (asks for the password)
 #
 # Creates /srv/riftbound/site (owned by the deploy user), installs the timers that
-# refresh the data and the visitor stats (GoAccess), and the Apache site with a
-# Let's Encrypt certificate.
+# refresh the data, back it up to GitHub and build the visitor stats (GoAccess), and the
+# Apache site with a Let's Encrypt certificate.
 # Everything after this is done by deploy/deploy.sh, no sudo needed.
 set -euo pipefail
 
@@ -18,6 +18,7 @@ HERE=$(cd "$(dirname "$0")" && pwd)
 
 echo "== Folders"
 install -d -o "$DEPLOY_USER" -g "$DEPLOY_USER" -m 755 "$BASE" "$BASE/site"
+install -d -o "$DEPLOY_USER" -g "$DEPLOY_USER" -m 700 "$BASE/backup"
 # Visitor stats are written by root and only read over ssh; not served by Apache.
 install -d -o root -g "$DEPLOY_USER" -m 750 "$BASE/stats"
 
@@ -31,7 +32,9 @@ cat > "$SUDOERS.tmp" <<RULES
 $DEPLOY_USER ALL=(root) NOPASSWD: /usr/bin/systemctl start riftbound-prices.service, \\
     /usr/bin/systemctl start riftbound-catalog.service, \\
     /usr/bin/systemctl start riftbound-stats.service, \\
-    /usr/bin/journalctl --no-pager -u riftbound-prices.service -u riftbound-catalog.service *
+    /usr/bin/systemctl start riftbound-backup.service, \\
+    /usr/bin/journalctl --no-pager -u riftbound-prices.service -u riftbound-catalog.service *, \\
+    /usr/bin/journalctl --no-pager -u riftbound-backup.service *
 RULES
 chmod 440 "$SUDOERS.tmp"
 visudo -cf "$SUDOERS.tmp" >/dev/null
@@ -39,12 +42,12 @@ mv "$SUDOERS.tmp" "$SUDOERS"
 
 echo "== systemd timers"
 for unit in riftbound-prices.service riftbound-prices.timer riftbound-catalog.service riftbound-catalog.timer \
-    riftbound-stats.service riftbound-stats.timer; do
+    riftbound-stats.service riftbound-stats.timer riftbound-backup.service riftbound-backup.timer; do
     sed "s/@DEPLOY_USER@/$DEPLOY_USER/" "$HERE/$unit" > "/etc/systemd/system/$unit"
     chmod 644 "/etc/systemd/system/$unit"
 done
 systemctl daemon-reload
-systemctl enable --now riftbound-prices.timer riftbound-catalog.timer riftbound-stats.timer
+systemctl enable --now riftbound-prices.timer riftbound-catalog.timer riftbound-stats.timer riftbound-backup.timer
 
 echo "== Apache site"
 SITE=/etc/apache2/sites-available/$DOMAIN.conf

@@ -4,3 +4,6 @@ card/
 sitemap.xml
 data/history.js
 set/
+data/seen.json
+products/
+movers/
