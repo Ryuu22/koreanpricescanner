@@ -18,30 +18,33 @@
 
   const STRINGS = {
     ko: {
-      switchTo: "English",
-      search: "카드명, 챔피언, 코드 검색 (e.g. 징크스, Jinx, OGN-301)",
+      brand: "리프트바운드 시세", switchTo: "EN",
+      search: "카드명, 챔피언, 코드 검색 (징크스, Jinx, OGN-301)",
+      filters: "필터", setLabel: "세트", rarityLabel: "희귀도", typeLabel: "유형", sortLabel: "정렬",
+      showResults: (n) => `카드 ${n}장 보기`,
       allSets: "모든 세트", allRarities: "모든 희귀도", allTypes: "모든 유형",
       sortCode: "코드순", sortPriceDesc: "시세 높은순", sortPriceAsc: "시세 낮은순",
-      sortListings: "매물 많은순", sortName: "이름순", pricedOnly: "시세 있는 카드만",
-      meta: (n, s, m, u) => `카드 ${n}장 · 번개장터 매물 ${s}개 중 ${m}개 매칭 · 업데이트 ${u}`,
-      metaNoPrices: (n) => `카드 ${n}장 · 시세 데이터 없음 (scripts/scrape_bunjang.py 실행)`,
+      sortListings: "매물 많은순", sortName: "이름순", pricedOnly: "시세 있는 카드", watchedOnly: "관심 카드",
+      meta: (n, s, m, u) => `카드 ${n}장, 번개장터 매물 ${s}개 중 ${m}개 매칭. ${u} 업데이트.`,
+      metaNoPrices: (n) => `카드 ${n}장. 아직 시세 데이터가 없습니다.`,
       count: (n) => `${n}장`,
-      listings: (n) => `${n}건`,
+      empty: "조건에 맞는 카드가 없습니다", emptyHint: "검색어나 필터를 바꿔 보세요.",
+      emptyWatch: "관심 카드가 없습니다", emptyWatchHint: "카드를 열고 별표를 눌러 추가하세요.",
       noPrice: "시세 없음",
       types: { unit: "유닛", spell: "주문", legend: "전설", gear: "장비", battlefield: "전장", rune: "룬", "": "기타" },
       variants: { alt: "대체 일러스트", signature: "시그니처" },
-      artist: "일러스트", bunjang: "번개장터", updated: "업데이트",
+      artist: "일러스트", bunjang: "번개장터 시세", updated: "업데이트",
       median: "중간값", min: "최저", max: "최고", count2: "매물",
-      priceNote: "판매 중인 매물의 호가 기준. 구매글·일괄 매물·그레이딩 카드는 통계에서 제외합니다.",
-      noListings: "매칭된 매물이 없습니다.",
+      priceNote: "판매 중인 매물의 호가 기준. 구매글, 일괄 매물, 그레이딩 카드는 통계에서 제외합니다.",
+      noListings: "지금은 매칭된 매물이 없습니다.",
       graded: "그레이딩",
-      searchBunjang: "번개장터에서 검색 ↗",
-      kreamNote: "KREAM은 자동 수집을 차단하므로 바로가기 링크만 제공합니다.",
-      searchKream: "KREAM에서 검색 ↗",
+      searchBunjang: "번개장터에서 검색",
+      kreamNote: "KREAM은 자동 수집을 막고 있어 검색 링크만 제공합니다.",
+      searchKream: "KREAM에서 검색",
       close: "닫기",
       stale: (h) => `시세가 ${h}시간 동안 업데이트되지 않았습니다. 실제 시세와 다를 수 있습니다.`,
       history: "시세 추이 (중간값)",
-      historyLoading: "불러오는 중…",
+      historyLoading: "불러오는 중",
       historyShort: (d) => `${d}부터 시세를 기록하고 있습니다. 며칠 뒤에 추이를 볼 수 있습니다.`,
       chg7: "7일 변동",
       privacy: "개인정보처리방침",
@@ -49,36 +52,41 @@
       soldNote: (n) => `최근 30일 동안 목록에서 사라진 매물 ${n}건의 마지막 가격 (판매된 것으로 추정)`,
       bundlesTitle: "이 카드가 포함된 일괄·묶음 매물",
       bundlesNote: "여러 장을 함께 파는 매물이라 시세 통계에는 넣지 않습니다.",
+      listingsTitle: "판매 중인 매물",
       outlier: "통계 제외 (다른 매물과 가격 차이가 큼)",
-      watchAdd: "☆ 관심 카드에 추가", watchRemove: "★ 관심 카드", watchedOnly: "★ 관심 카드만",
-      navProducts: "미개봉 상품 시세", navMovers: "급등·급락", navCalc: "덱 가격 계산기", navAbout: "시세 안내",
-      disclaimer: "Riftbound KR Prices는 Riot Games의 보증을 받지 않았으며, Riot Games 또는 Riot Games 자산의 제작·관리에 공식적으로 관여하는 누구의 견해나 의견도 반영하지 않습니다. Riot Games 및 관련 모든 자산은 Riot Games, Inc.의 상표 또는 등록 상표입니다. 번개장터·KREAM과 제휴 관계가 없습니다.",
+      watchAdd: "관심 카드", watchRemove: "관심 카드",
+      navCards: "카드", navProducts: "미개봉 상품", navMovers: "급등·급락", navCalc: "덱 계산기", navAbout: "시세 안내",
+      bySet: "세트별 시세",
+      disclaimer: "리프트바운드 시세는 Riot Games의 보증을 받지 않았으며, Riot Games 또는 Riot Games 자산의 제작·관리에 공식적으로 관여하는 누구의 견해나 의견도 반영하지 않습니다. Riot Games 및 관련 모든 자산은 Riot Games, Inc.의 상표 또는 등록 상표입니다. 번개장터, KREAM과 제휴 관계가 없습니다.",
     },
     en: {
-      switchTo: "한국어",
-      search: "Search card, champion or code (e.g. Jinx, 징크스, OGN-301)",
+      brand: "Riftbound Prices", switchTo: "한국어",
+      search: "Search card, champion or code (Jinx, 징크스, OGN-301)",
+      filters: "Filters", setLabel: "Set", rarityLabel: "Rarity", typeLabel: "Type", sortLabel: "Sort",
+      showResults: (n) => `Show ${n} cards`,
       allSets: "All sets", allRarities: "All rarities", allTypes: "All types",
       sortCode: "By code", sortPriceDesc: "Price: high to low", sortPriceAsc: "Price: low to high",
-      sortListings: "Most listings", sortName: "By name", pricedOnly: "Only cards with prices",
-      meta: (n, s, m, u) => `${n} cards · ${m} of ${s} Bunjang listings matched · updated ${u}`,
-      metaNoPrices: (n) => `${n} cards · no price data yet (run scripts/scrape_bunjang.py)`,
+      sortListings: "Most listings", sortName: "By name", pricedOnly: "With prices", watchedOnly: "Watchlist",
+      meta: (n, s, m, u) => `${n} cards, ${m} of ${s} Bunjang listings matched. Updated ${u}.`,
+      metaNoPrices: (n) => `${n} cards. No price data yet.`,
       count: (n) => `${n} cards`,
-      listings: (n) => `${n} listing${n === 1 ? "" : "s"}`,
+      empty: "No cards match", emptyHint: "Try a different search or fewer filters.",
+      emptyWatch: "Your watchlist is empty", emptyWatchHint: "Open a card and tap the star to add it.",
       noPrice: "No price",
       types: { unit: "Unit", spell: "Spell", legend: "Legend", gear: "Gear", battlefield: "Battlefield", rune: "Rune", "": "Other" },
       variants: { alt: "Alternate art", signature: "Signature" },
-      artist: "Artist", bunjang: "Bunjang (번개장터)", updated: "Updated",
+      artist: "Artist", bunjang: "Bunjang prices", updated: "Updated",
       median: "Median", min: "Lowest", max: "Highest", count2: "Listings",
-      priceNote: "Asking prices of listings currently for sale, in Korean won. Buying posts, bundles and graded cards are left out of the stats.",
-      noListings: "No matching listings.",
+      priceNote: "Asking prices of listings for sale, in Korean won. Buying posts, bundles and graded cards are left out of the stats.",
+      noListings: "No matching listings right now.",
       graded: "Graded",
-      searchBunjang: "Search on Bunjang ↗",
+      searchBunjang: "Search on Bunjang",
       kreamNote: "KREAM blocks automated access, so only a search link is provided.",
-      searchKream: "Search on KREAM ↗",
+      searchKream: "Search on KREAM",
       close: "Close",
       stale: (h) => `Prices haven't updated in ${h} hours and may be out of date.`,
       history: "Price history (median)",
-      historyLoading: "Loading…",
+      historyLoading: "Loading",
       historyShort: (d) => `Price history is recorded since ${d}. Check back in a few days for a trend.`,
       chg7: "7-day change",
       privacy: "Privacy policy",
@@ -86,10 +94,12 @@
       soldNote: (n) => `Last price of ${n} listings that disappeared in the last 30 days (probably sold)`,
       bundlesTitle: "Bundles and lots with this card",
       bundlesNote: "Several cards sold together, so they're not counted in the stats.",
+      listingsTitle: "Listings for sale",
       outlier: "Not in stats (far from the other prices)",
-      watchAdd: "☆ Add to watchlist", watchRemove: "★ On watchlist", watchedOnly: "★ Watchlist only",
-      navProducts: "Sealed products", navMovers: "Price movers", navCalc: "Deck calculator", navAbout: "How prices work",
-      disclaimer: "Riftbound KR Prices isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc. Not affiliated with Bunjang or KREAM.",
+      watchAdd: "Watch", watchRemove: "Watching",
+      navCards: "Cards", navProducts: "Sealed", navMovers: "Movers", navCalc: "Deck calc", navAbout: "How it works",
+      bySet: "Prices by set",
+      disclaimer: "Riftbound Prices isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc. Not affiliated with Bunjang or KREAM.",
     },
   };
 
@@ -105,6 +115,7 @@
   let t = STRINGS[lang];
 
   const pct = (n) => `<span class="chg ${n > 0 ? "up" : "down"}">${n > 0 ? "▲" : "▼"}${Math.abs(n)}%</span>`;
+  const icon = (name, cls = "i") => `<svg class="${cls}" aria-hidden="true"><use href="icons.svg#${name}"/></svg>`;
   const won = (n) => lang === "ko" ? n.toLocaleString("ko-KR") + "원" : "₩" + n.toLocaleString("en-US");
   const nameOf = (c) => lang === "ko" ? c.name : c.nameEn || c.name;
   const setNameOf = (c) => lang === "ko" ? c.setName : c.setNameEn || c.setName;
@@ -148,6 +159,8 @@
     $("q").placeholder = t.search;
     $("lang").textContent = t.switchTo;
     $("close").setAttribute("aria-label", t.close);
+    $("filtersClose").setAttribute("aria-label", t.close);
+    document.title = `${t.brand} · ${lang === "ko" ? "Riftbound Prices" : "리프트바운드 시세"}`;
 
     fillSelect($("set"), uniq(CARDS.map((c) => c.set)).map((s) =>
       [s, `${s} · ${setNameOf(CARDS.find((c) => c.set === s))}`]));
@@ -191,8 +204,15 @@
     else if (sort === "listings") results.sort((a, b) => ((BJ[b.id] || {}).n || 0) - ((BJ[a.id] || {}).n || 0));
     else if (sort === "name") results.sort((a, b) => nameOf(a).localeCompare(nameOf(b), lang));
 
-    $("count").textContent = t.count(results.length);
-    $("grid").innerHTML = "";
+    $("count").textContent = t.count(results.length.toLocaleString());
+    $("filtersDone").textContent = t.showResults(results.length.toLocaleString());
+    const active = [set, rarity, type, priced, onlyWatched].filter(Boolean).length;
+    $("filterCount").hidden = !active;
+    $("filterCount").textContent = active;
+    $("grid").innerHTML = results.length ? "" : (onlyWatched && !watched.size
+      ? `<p class="empty"><b>${t.emptyWatch}</b>${t.emptyWatchHint}</p>`
+      : `<p class="empty"><b>${t.empty}</b>${t.emptyHint}</p>`);
+    $("grid").style.display = results.length ? "" : "block";
     shown = 0;
     more();
     saveState();
@@ -209,12 +229,12 @@
     const p = BJ[c.id];
     const el = document.createElement("button");
     el.className = "card";
+    el.type = "button";
     el.innerHTML = `
-      <img src="${c.img}" alt="${esc(nameOf(c))}" loading="lazy" width="744" height="1039">
-      <div class="name">${watched.has(c.id) ? '<span class="star">★</span> ' : ""}${esc(nameOf(c))}</div>
-      <div class="sub"><span>${esc(c.code)}</span><span class="rar ${c.rarity}">${esc(rarityOf(c))}</span></div>
-      ${p ? `<div class="sub"><span class="price">${won(p.median)}${p.chg7 ? " " + pct(p.chg7) : ""}</span><span>${t.listings(p.n)}</span></div>`
-          : `<div class="price none">${t.noPrice}</div>`}`;
+      <div class="art"><img src="${c.img}" alt="${esc(nameOf(c))}" loading="lazy" width="744" height="1039"></div>
+      <div class="name" title="${esc(nameOf(c))} ${esc(c.code)}">${watched.has(c.id) ? icon("star-fill", "star") : ""}${esc(nameOf(c))}</div>
+      <div class="row">${p ? `<span class="price">${won(p.median)}</span>${p.chg7 ? pct(p.chg7) : ""}`
+          : `<span class="none">${t.noPrice}</span>`}</div>`;
     el.addEventListener("click", () => openDetail(c));
     return el;
   }
@@ -238,47 +258,63 @@
         <td class="p">${won(l.price)}</td>
       </tr>`).join("") : "";
 
+    const chips = [
+      `<span class="chip">${esc(c.code)}</span>`,
+      `<span class="chip">${esc(setNameOf(c))}</span>`,
+      `<span class="chip rar ${c.rarity}">${esc(rarityOf(c))}</span>`,
+      `<span class="chip">${esc(t.types[c.type] || c.type)}</span>`,
+      ...champs.map((ch) => `<span class="chip">${esc(ch)}</span>`),
+      c.variant ? `<span class="chip">${t.variants[c.variant]}</span>` : "",
+    ].join("");
+    const ext = (href, label) =>
+      `<a class="btn" href="${href}" target="_blank" rel="noopener">${label}${icon("arrow-up-right")}</a>`;
+
     $("detail-body").innerHTML = `
       <div class="detail">
-        <div><img src="${c.img}" alt="${esc(nameOf(c))}"></div>
+        <div class="d-art"><img src="${c.img}" alt="${esc(nameOf(c))}"></div>
         <div>
-          <h2>${esc(nameOf(c))}</h2>
-          <button class="watch" id="watch" type="button">${watched.has(c.id) ? t.watchRemove : t.watchAdd}</button>
-          ${lang === "en" && c.name !== c.nameEn ? `<p class="facts alt-name">${esc(c.name)}</p>` : ""}
-          <p class="facts">
-            ${esc(c.code)} · ${esc(setNameOf(c))} · <span class="rar ${c.rarity}">${esc(rarityOf(c))}</span>
-            · ${esc(t.types[c.type] || c.type)}
-            ${champs.length ? `· ${esc(champs.join(", "))}` : ""}
-            ${c.variant ? `· ${t.variants[c.variant]}` : ""}
-            ${c.artist ? `<br>${t.artist}: ${esc(c.artist)}` : ""}
-          </p>
-
-          <div class="src"><h3>${t.bunjang}</h3><span class="note">${PRICES.updated ? `${t.updated} ${esc(PRICES.updated)}` : ""}</span></div>
-          ${p ? `
-            <div class="stats">
-              <div class="stat"><b>${won(p.median)}</b><span>${t.median}</span></div>
-              <div class="stat"><b>${won(p.min)}</b><span>${t.min}</span></div>
-              <div class="stat"><b>${won(p.max)}</b><span>${t.max}</span></div>
-              <div class="stat"><b>${p.n}</b><span>${t.count2}</span></div>
+          <div class="d-head">
+            <div>
+              <h2>${esc(nameOf(c))}</h2>
+              ${lang === "en" && c.name !== c.nameEn ? `<p class="alt-name">${esc(c.name)}</p>` : ""}
             </div>
-            ${p.chg7 != null ? `<p class="note">${t.chg7}: ${p.chg7 ? pct(p.chg7) : "0%"}</p>` : ""}
-            <div class="hist" id="hist"><h3>${t.history}</h3><p class="note">${t.historyLoading}</p></div>
-            <p class="note">${t.priceNote} <a href="about.html">${t.navAbout}</a></p>
-            <table>${rows}</table>`
-          : `<p class="note">${t.noListings}</p>`}
-          ${soldBlock(c.id)}
-          ${bundleBlock(c.id)}
-          <div class="links"><a href="${bjSearch}" target="_blank" rel="noopener">${t.searchBunjang}</a></div>
+            <button class="btn watch" id="watch" type="button"></button>
+          </div>
+          <div class="chips">${chips}</div>
+          ${c.artist ? `<p class="artist">${t.artist} ${esc(c.artist)}</p>` : ""}
 
-          <div class="src"><h3>KREAM</h3></div>
+          <section class="sec">
+            <div class="sec-head"><h3>${t.bunjang}</h3><span class="note">${PRICES.updated ? `${t.updated} ${esc(PRICES.updated)}` : ""}</span></div>
+            ${p ? `
+              <div class="stats">
+                <div class="stat"><b>${won(p.median)}</b><span>${t.median}</span></div>
+                <div class="stat"><b>${won(p.min)}</b><span>${t.min}</span></div>
+                <div class="stat"><b>${won(p.max)}</b><span>${t.max}</span></div>
+                <div class="stat"><b>${p.n}</b><span>${t.count2}</span></div>
+              </div>
+              ${p.chg7 != null ? `<p class="note">${t.chg7} ${p.chg7 ? pct(p.chg7) : "0%"}</p>` : ""}
+              ${soldBlock(c.id)}
+              <div class="hist" id="hist"><h3>${t.history}</h3><p class="note">${t.historyLoading}</p></div>
+              <p class="note">${t.priceNote} <a href="about.html">${t.navAbout}</a></p>`
+            : `<p class="note">${t.noListings}</p>${soldBlock(c.id)}`}
+          </section>
+          ${p ? `<section class="sec"><h3>${t.listingsTitle}</h3><table class="listings">${rows}</table></section>` : ""}
+          ${bundleBlock(c.id)}
+          <div class="links">${ext(bjSearch, t.searchBunjang)}${ext(kreamSearch, t.searchKream)}</div>
           <p class="note">${t.kreamNote}</p>
-          <div class="links"><a href="${kreamSearch}" target="_blank" rel="noopener">${t.searchKream}</a></div>
         </div>
       </div>`;
+    const paintWatch = () => {
+      const on = watched.has(c.id);
+      $("watch").setAttribute("aria-pressed", on);
+      $("watch").innerHTML = icon(on ? "star-fill" : "star") + (on ? t.watchRemove : t.watchAdd);
+    };
+    paintWatch();
     $("watch").addEventListener("click", () => {
       toggleWatch(c.id);
-      $("watch").textContent = watched.has(c.id) ? t.watchRemove : t.watchAdd;
+      paintWatch();
       if ($("watched").checked) apply();
+      else refreshTile(c);
     });
     if (!$("detail").open) $("detail").showModal();
     openCard = c.id;
@@ -289,18 +325,25 @@
   function soldBlock(id) {
     const s = SOLD[id];
     if (!s) return "";
-    return `<div class="soldbox"><b>${won(s.median)}</b> ${t.sold}<p class="note">${t.soldNote(s.n)}</p></div>`;
+    return `<div class="soldbox"><b>${won(s.median)}</b>${t.sold}<p class="note">${t.soldNote(s.n)}</p></div>`;
   }
 
   function bundleBlock(id) {
     const ls = (IN_BUNDLES[id] || []).map((pid) => BUNDLES[pid]).filter(Boolean);
     if (!ls.length) return "";
-    return `<h3 class="sub3">${t.bundlesTitle}</h3><p class="note">${t.bundlesNote}</p><table>${ls.map((l) => `
+    return `<section class="sec"><h3>${t.bundlesTitle}</h3><p class="note">${t.bundlesNote}</p><table class="listings">${ls.map((l) => `
       <tr>
         <td>${l.thumb ? `<img src="${esc(l.thumb)}" alt="" loading="lazy">` : ""}</td>
         <td><a href="https://m.bunjang.co.kr/products/${l.pid}" target="_blank" rel="noopener">${esc(l.title)}</a></td>
         <td class="p">${won(l.price)}</td>
-      </tr>`).join("")}</table>`;
+      </tr>`).join("")}</table></section>`;
+  }
+
+  // Redraw one tile in place (watch star changed) without re-running the search.
+  function refreshTile(c) {
+    const i = results.indexOf(c);
+    const old = $("grid").children[i];
+    if (i >= 0 && i < shown && old) old.replaceWith(tile(c));
   }
 
   // history.js is only needed in the detail view, so it's loaded on first use
@@ -347,7 +390,7 @@
         <polygon class="area" points="${x(pts[0])},${HT} ${line} ${x(pts[pts.length - 1])},${HT}"></polygon>
         <polyline points="${line}"></polyline>${dots}
       </svg>
-      <div class="axis"><span>${esc(pts[0].date)}</span><span>${won(lo)} – ${won(hi)}</span><span>${esc(pts[pts.length - 1].date)}</span></div>`;
+      <div class="axis"><span>${esc(pts[0].date)}</span><span>${won(lo)} ~ ${won(hi)}</span><span>${esc(pts[pts.length - 1].date)}</span></div>`;
   }
 
   function setLang(next) {
@@ -390,6 +433,11 @@
   for (const id of ["set", "rarity", "type", "sort", "priced", "watched"]) $(id).addEventListener("change", apply);
   $("lang").addEventListener("click", () => setLang(lang === "ko" ? "en" : "ko"));
   $("close").addEventListener("click", () => $("detail").close());
+  // Mobile: filters open as a bottom sheet
+  const sheet = (open) => document.body.classList.toggle("sheet-open", open);
+  $("filtersBtn").addEventListener("click", () => sheet(true));
+  for (const id of ["filtersClose", "filtersDone", "backdrop"]) $(id).addEventListener("click", () => sheet(false));
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") sheet(false); });
   $("detail").addEventListener("close", () => { openCard = ""; saveState(); });
   $("detail").addEventListener("click", (e) => { if (e.target === $("detail")) $("detail").close(); });
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Riftbound KR Prices · 리프트바운드 카드 시세</title>
+  <title>리프트바운드 시세 · Riftbound Prices</title>
   <meta name="description" content="리프트바운드(Riftbound) 전체 카드의 번개장터 시세를 한눈에. 카드명·챔피언·코드로 검색하고 최저가·중간값·시세 추이를 확인하세요. Korean secondhand market prices for every Riftbound card.">
   <link rel="canonical" href="https://riftbound.card-cafe.com/">
   <meta name="naver-site-verification" content="659376fa66c7ae00143c1e8f3c4b4613a07d575b">
@@ -12,61 +12,90 @@
   <link rel="icon" href="favicon.ico" sizes="32x32">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Riftbound KR Prices">
-  <meta property="og:title" content="Riftbound KR Prices · 리프트바운드 카드 시세">
+  <meta property="og:site_name" content="리프트바운드 시세">
+  <meta property="og:title" content="리프트바운드 시세 · Riftbound Prices">
   <meta property="og:description" content="리프트바운드 전체 카드의 번개장터 시세와 추이. Korean market prices for every Riftbound card.">
   <meta property="og:url" content="https://riftbound.card-cafe.com/">
   <meta property="og:image" content="https://riftbound.card-cafe.com/og.png">
   <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="top">
-    <div class="brand">
-      <h1>Riftbound KR Prices</h1>
-      <p class="meta" id="meta"></p>
+  <header class="site-head">
+    <div class="bar">
+      <a class="logo" href="./"><span class="mark"></span><span data-i18n="brand">리프트바운드 시세</span></a>
+      <nav class="tabs" aria-label="Sections">
+        <a href="./" aria-current="page"><svg class="i" aria-hidden="true"><use href="icons.svg#cards"/></svg><span data-i18n="navCards">카드</span></a>
+        <a href="products/"><svg class="i" aria-hidden="true"><use href="icons.svg#package"/></svg><span data-i18n="navProducts">미개봉 상품</span></a>
+        <a href="movers/"><svg class="i" aria-hidden="true"><use href="icons.svg#trend-up"/></svg><span data-i18n="navMovers">급등·급락</span></a>
+        <a href="calc.html"><svg class="i" aria-hidden="true"><use href="icons.svg#calculator"/></svg><span data-i18n="navCalc">덱 계산기</span></a>
+        <a href="about.html"><svg class="i" aria-hidden="true"><use href="icons.svg#info"/></svg><span data-i18n="navAbout">시세 안내</span></a>
+      </nav>
       <button class="lang" id="lang" type="button"></button>
-    </div>
-    <nav class="nav">
-      <a href="products/" data-i18n="navProducts"></a>
-      <a href="movers/" data-i18n="navMovers"></a>
-      <a href="calc.html" data-i18n="navCalc"></a>
-      <a href="about.html" data-i18n="navAbout"></a>
-    </nav>
-    <p class="stale" id="stale" hidden></p>
-    <div class="controls">
-      <input id="q" type="search" autocomplete="off" autofocus>
-      <select id="set"><option value="" data-i18n="allSets"></option></select>
-      <select id="rarity"><option value="" data-i18n="allRarities"></option></select>
-      <select id="type"><option value="" data-i18n="allTypes"></option></select>
-      <select id="sort">
-        <option value="code" data-i18n="sortCode"></option>
-        <option value="price_desc" data-i18n="sortPriceDesc"></option>
-        <option value="price_asc" data-i18n="sortPriceAsc"></option>
-        <option value="listings" data-i18n="sortListings"></option>
-        <option value="name" data-i18n="sortName"></option>
-      </select>
-      <label class="check"><input id="priced" type="checkbox"> <span data-i18n="pricedOnly"></span></label>
-      <label class="check"><input id="watched" type="checkbox"> <span data-i18n="watchedOnly"></span></label>
     </div>
   </header>
 
+  <div class="toolbar">
+    <div class="inner">
+      <label class="search">
+        <svg class="i" aria-hidden="true"><use href="icons.svg#magnifying-glass"/></svg>
+        <input id="q" type="search" autocomplete="off" aria-label="Search">
+      </label>
+      <button class="btn filter-btn" id="filtersBtn" type="button" aria-controls="filters">
+        <svg class="i" aria-hidden="true"><use href="icons.svg#sliders-horizontal"/></svg>
+        <span data-i18n="filters"></span><b class="badge" id="filterCount" hidden></b>
+      </button>
+      <div class="filters" id="filters">
+        <div class="sheet-head"><span data-i18n="filters"></span>
+          <button class="close" id="filtersClose" type="button"><svg class="i" aria-hidden="true"><use href="icons.svg#x"/></svg></button></div>
+        <label class="field"><span data-i18n="setLabel"></span>
+          <select id="set"><option value="" data-i18n="allSets"></option></select>
+          <svg class="caret" aria-hidden="true"><use href="icons.svg#caret-down"/></svg></label>
+        <label class="field"><span data-i18n="rarityLabel"></span>
+          <select id="rarity"><option value="" data-i18n="allRarities"></option></select>
+          <svg class="caret" aria-hidden="true"><use href="icons.svg#caret-down"/></svg></label>
+        <label class="field"><span data-i18n="typeLabel"></span>
+          <select id="type"><option value="" data-i18n="allTypes"></option></select>
+          <svg class="caret" aria-hidden="true"><use href="icons.svg#caret-down"/></svg></label>
+        <label class="field"><span data-i18n="sortLabel"></span>
+          <select id="sort">
+            <option value="code" data-i18n="sortCode"></option>
+            <option value="price_desc" data-i18n="sortPriceDesc"></option>
+            <option value="price_asc" data-i18n="sortPriceAsc"></option>
+            <option value="listings" data-i18n="sortListings"></option>
+            <option value="name" data-i18n="sortName"></option>
+          </select>
+          <svg class="caret" aria-hidden="true"><use href="icons.svg#caret-down"/></svg></label>
+        <label class="toggle"><input id="priced" type="checkbox"><span><svg class="i" aria-hidden="true"><use href="icons.svg#check"/></svg><span data-i18n="pricedOnly"></span></span></label>
+        <label class="toggle"><input id="watched" type="checkbox"><span><svg class="i" aria-hidden="true"><use href="icons.svg#check"/></svg><span data-i18n="watchedOnly"></span></span></label>
+        <button class="btn primary sheet-done" id="filtersDone" type="button"></button>
+      </div>
+      <div class="backdrop" id="backdrop"></div>
+    </div>
+  </div>
+
   <main>
+    <p class="stale" id="stale" hidden></p>
     <div class="ad" id="ad-top"></div>
     <p class="count" id="count"></p>
     <div class="grid" id="grid"></div>
     <div id="sentinel"></div>
   </main>
 
-  <footer class="foot">
-    <p class="sets">세트별 시세 · Prices by set: <!-- sets --><a href="/set/ogn/">오리진</a> · <a href="/set/ogs/">오리진 - 증명의 전장</a> · <a href="/set/rad/">레디언스</a> · <a href="/set/sfd/">스피릿포지드</a> · <a href="/set/unl/">언리시드</a> · <a href="/set/ven/">벤데타</a><!-- /sets --></p>
-    <p>리프트바운드(Riftbound) 전체 카드의 번개장터 시세·가격을 카드명, 챔피언, 카드 코드로 검색하세요. 오버넘버, 알트, 시그니처 카드의 최저가와 중간값, 시세 추이를 6시간마다 업데이트합니다.</p>
-    <p><a href="privacy.html" data-i18n="privacy"></a> · <a href="mailto:dan@torchsmith.com">dan@torchsmith.com</a></p>
-    <p data-i18n="disclaimer"></p>
+  <footer class="site-foot">
+    <div class="inner">
+      <p class="meta" id="meta"></p>
+      <nav class="sets"><span data-i18n="bySet"></span><!-- sets --><a href="/set/ogn/">오리진</a><a href="/set/ogs/">오리진 - 증명의 전장</a><a href="/set/rad/">레디언스</a><a href="/set/sfd/">스피릿포지드</a><a href="/set/unl/">언리시드</a><a href="/set/ven/">벤데타</a><!-- /sets --></nav>
+      <p>리프트바운드(Riftbound) 전체 카드의 번개장터 시세와 가격을 카드명, 챔피언, 카드 코드로 검색하세요. 오버넘버, 알트, 시그니처 카드의 최저가와 중간값, 시세 추이를 6시간마다 업데이트합니다.</p>
+      <p class="foot-links"><a href="about.html" data-i18n="navAbout"></a><a href="privacy.html" data-i18n="privacy"></a><a href="mailto:dan@torchsmith.com">dan@torchsmith.com</a></p>
+      <p data-i18n="disclaimer"></p>
+    </div>
   </footer>
 
   <dialog id="detail">
-    <button class="close" id="close">×</button>
+    <button class="close" id="close" type="button"><svg class="i" aria-hidden="true"><use href="icons.svg#x"/></svg></button>
     <div id="detail-body"></div>
   </dialog>
 

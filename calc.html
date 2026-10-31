@@ -3,28 +3,46 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>덱 가격 계산기 · Deck calculator · Riftbound KR Prices</title>
+  <title>덱 가격 계산기 · Deck calculator · 리프트바운드 시세</title>
   <meta name="description" content="리프트바운드 덱 리스트나 카드 목록을 붙여넣으면 번개장터 시세로 덱 가격을 계산합니다. Paste a Riftbound decklist to price it at Korean market prices.">
   <link rel="canonical" href="https://riftbound.card-cafe.com/calc.html">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="top">
-    <div class="brand"><a class="site" href="./">Riftbound KR Prices</a></div>
-    <nav class="nav"><a href="products/">미개봉 상품 시세</a><a href="movers/">급등·급락</a><a href="calc.html">덱 가격 계산기</a><a href="about.html">시세 안내</a></nav>
+  <header class="site-head">
+    <div class="bar">
+      <a class="logo" href="./"><span class="mark"></span><span>리프트바운드 시세</span></a>
+      <nav class="tabs" aria-label="Sections">
+        <a href="./"><svg class="i" aria-hidden="true"><use href="icons.svg#cards"/></svg><span>카드</span></a>
+        <a href="products/"><svg class="i" aria-hidden="true"><use href="icons.svg#package"/></svg><span>미개봉 상품</span></a>
+        <a href="movers/"><svg class="i" aria-hidden="true"><use href="icons.svg#trend-up"/></svg><span>급등·급락</span></a>
+        <a href="calc.html" aria-current="page"><svg class="i" aria-hidden="true"><use href="icons.svg#calculator"/></svg><span>덱 계산기</span></a>
+        <a href="about.html"><svg class="i" aria-hidden="true"><use href="icons.svg#info"/></svg><span>시세 안내</span></a>
+      </nav>
+    </div>
   </header>
 
   <main class="doc calc">
     <h1 data-i18n="title"></h1>
     <p data-i18n="intro"></p>
+    <label for="list" data-i18n="listLabel"></label>
     <textarea id="list" rows="12" spellcheck="false"></textarea>
     <div class="links">
-      <button id="fromWatch" type="button" data-i18n="fromWatch"></button>
-      <button id="example" type="button" data-i18n="example"></button>
+      <button class="btn" id="fromWatch" type="button" data-i18n="fromWatch"></button>
+      <button class="btn" id="example" type="button" data-i18n="example"></button>
     </div>
     <div id="result"></div>
   </main>
+
+  <footer class="site-foot">
+    <div class="inner">
+      <p class="foot-links"><a href="about.html">시세 안내</a><a href="privacy.html">개인정보처리방침</a><a href="mailto:dan@torchsmith.com">dan@torchsmith.com</a></p>
+      <p>Riftbound Prices isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc. 번개장터, KREAM과 제휴 관계가 없습니다.</p>
+    </div>
+  </footer>
 
   <script src="data/cards.js"></script>
   <script src="data/prices.js"></script>

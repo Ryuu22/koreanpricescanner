@@ -31,10 +31,14 @@ from scrape_bunjang import load_js  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = "https://riftbound.card-cafe.com"
-BRAND = "Riftbound KR Prices"
+BRAND = "리프트바운드 시세"
+FONT = "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+TABS = [("cards", "/", "cards", "카드"), ("products", "/products/", "package", "미개봉 상품"),
+        ("movers", "/movers/", "trend-up", "급등·급락"), ("calc", "/calc.html", "calculator", "덱 계산기"),
+        ("about", "/about.html", "info", "시세 안내")]
 CONTACT = "dan@torchsmith.com"
 TYPES = {"unit": "유닛", "spell": "주문", "legend": "전설", "gear": "장비", "battlefield": "전장", "rune": "룬"}
-DISCLAIMER = ("Riftbound KR Prices isn't endorsed by Riot Games and doesn't reflect the views or opinions of "
+DISCLAIMER = ("Riftbound Prices isn't endorsed by Riot Games and doesn't reflect the views or opinions of "
               "Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, "
               "and all associated properties are trademarks or registered trademarks of Riot Games, Inc. "
               "번개장터·KREAM과 제휴 관계가 없습니다.")
@@ -86,7 +90,14 @@ def json_ld(data):
             + json.dumps(data, ensure_ascii=False).replace("</", "<\\/") + "</script>")
 
 
-def head(title, desc, url, image, extra=""):
+def icon(name, cls="i"):
+    return f'<svg class="{cls}" aria-hidden="true"><use href="/icons.svg#{name}"/></svg>'
+
+
+def head(title, desc, url, image, extra="", active="cards"):
+    current = ' aria-current="page"'
+    tabs = "".join(f'<a href="{href}"{current if key == active else ""}>{icon(ic)}<span>{label}</span></a>'
+                   for key, href, ic, label in TABS)
     return f"""<!doctype html>
 <html lang="ko">
 <head>
@@ -96,6 +107,8 @@ def head(title, desc, url, image, extra=""):
   <meta name="description" content="{e(desc)}">
   <link rel="canonical" href="{url}">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="{FONT}">
   <link rel="stylesheet" href="/style.css">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="{BRAND}">
@@ -107,20 +120,22 @@ def head(title, desc, url, image, extra=""):
   {extra}
 </head>
 <body>
-  <header class="top">
-    <div class="brand"><a class="site" href="/">{BRAND}</a>
-      <p class="meta"><a class="home" href="/">리프트바운드 전체 카드 시세 검색 →</a></p></div>
-    <nav class="nav"><a href="/products/">미개봉 상품 시세</a><a href="/movers/">급등·급락</a>
-      <a href="/calc.html">덱 가격 계산기</a><a href="/about.html">시세 안내</a></nav>
+  <header class="site-head">
+    <div class="bar">
+      <a class="logo" href="/"><span class="mark"></span><span>{BRAND}</span></a>
+      <nav class="tabs" aria-label="Sections">{tabs}</nav>
+    </div>
   </header>"""
 
 
 def foot(set_links):
     return f"""
-  <footer class="foot">
-    <p class="sets">세트별 시세: {set_links}</p>
-    <p><a href="/about.html">시세 안내</a> · <a href="/privacy.html">개인정보처리방침</a> · <a href="mailto:{CONTACT}">{CONTACT}</a></p>
-    <p>{e(DISCLAIMER)}</p>
+  <footer class="site-foot">
+    <div class="inner">
+      <nav class="sets"><span>세트별 시세</span>{set_links}</nav>
+      <p class="foot-links"><a href="/about.html">시세 안내</a><a href="/privacy.html">개인정보처리방침</a><a href="mailto:{CONTACT}">{CONTACT}</a></p>
+      <p>{e(DISCLAIMER)}</p>
+    </div>
   </footer>
 </body>
 </html>
@@ -189,7 +204,7 @@ def chart(points):
           <polygon class="area" points="{xy[0][0]:.1f},{H} {line} {xy[-1][0]:.1f},{H}"></polygon>
           <polyline points="{line}"></polyline>{dots}
         </svg>
-        <div class="axis"><span>{points[0][0]}</span><span>{won(lo)} – {won(hi)}</span><span>{points[-1][0]}</span></div>
+        <div class="axis"><span>{points[0][0]}</span><span>{won(lo)} ~ {won(hi)}</span><span>{points[-1][0]}</span></div>
       </div>"""
 
 
@@ -220,24 +235,26 @@ def card_page(c, p, updated, history, prev_c, next_c, related, set_name, set_lin
         about += (f" 현재 번개장터에서 판매 중인 매물 {p['n']}건의 가격은 {won(p['min'])}~{won(p['max'])}이며, "
                   f"중간값은 {won(p['median'])}입니다.")
 
-    facts = [c["code"], set_name, rarity, ctype, ", ".join(c.get("champsKo", [])), " · ".join(words)]
+    rar = " rar " + c["rarity"]
+    chips = "".join(f'<span class="chip{rar if f == rarity else ""}">{e(f)}</span>'
+                    for f in [c["code"], set_name, rarity, ctype, *c.get("champsKo", []), *words] if f)
     if p:
         prices = f"""{stats_html(p)}
-      <p class="note">판매 중인 번개장터 매물의 호가 기준 (그레이딩 카드는 통계에서 제외). {e(updated)} 업데이트.
-        <a href="/about.html">시세 계산 방법</a></p>
+      <p class="note">판매 중인 번개장터 매물의 호가 기준이며 구매글, 일괄 매물, 그레이딩 카드는 통계에서 제외합니다.
+        {e(updated)} 업데이트. <a href="/about.html">시세 계산 방법</a></p>
       {chart(history) if len(history) >= 2 else ""}
       <h2>번개장터 판매 매물</h2>
-      <table>{listing_rows(p["listings"])}</table>"""
+      <table class="listings">{listing_rows(p["listings"])}</table>"""
     else:
         prices = '<p class="note">현재 번개장터에 매칭된 매물이 없습니다.</p>'
     prices += sold_html(sold)
     if bundles:
         prices += (f'<h2>{e(c["name"])} 포함 일괄·묶음 매물</h2><p class="note">여러 장을 함께 파는 매물이라 시세 통계에는 '
-                   f'넣지 않습니다.</p><table>{listing_rows(bundles, tags=False)}</table>')
+                   f'넣지 않습니다.</p><table class="listings">{listing_rows(bundles, tags=False)}</table>')
 
-    nav = " · ".join(
-        f'<a href="/card/{x["id"]}/">{arrow} {e(short_code(x))} {e(x["name"])}</a>'
-        for arrow, x in (("←", prev_c), ("→", next_c)) if x)
+    nav = "".join(
+        f'<a href="/card/{x["id"]}/">{arrow} {e(short_code(x))} {e(x["name"])}</a>' if x else "<span></span>"
+        for arrow, x in (("←", prev_c), ("→", next_c)))
     rel = ""
     if related:
         rel = "<h2>같은 챔피언 카드</h2><ul class=\"rel\">" + "".join(
@@ -252,23 +269,25 @@ def card_page(c, p, updated, history, prev_c, next_c, related, set_name, set_lin
         product["offers"] = {"@type": "AggregateOffer", "priceCurrency": "KRW", "lowPrice": p["min"],
                              "highPrice": p["max"], "offerCount": p["n"]}
 
+    artist = f'<p class="artist">일러스트 {e(c["artist"])}</p>' if c.get("artist") else ""
     return head(title, desc, url, image, crumbs_ld + "\n  " + json_ld(product)) + f"""
   <main class="cardpage">
     {crumbs}
     <div class="detail">
-      <div><img src="/{e(c['img'])}" alt="리프트바운드 {e(c['name'])} {e(code)} 카드" width="744" height="1039"></div>
+      <div class="d-art"><img src="/{e(c['img'])}" alt="리프트바운드 {e(c['name'])} {e(code)} 카드" width="744" height="1039"></div>
       <div>
         <h1>{e(display_name(c))}</h1>
-        <p class="facts">{" · ".join(e(f) for f in facts if f)}{f"<br>일러스트: {e(c['artist'])}" if c.get("artist") else ""}</p>
-        <p class="about">{about}</p>
+        <div class="chips">{chips}</div>
+        {artist}
+        <p class="about" style="margin-top:18px">{about}</p>
         <h2>번개장터 시세·가격</h2>
         {prices}
         <div class="links">
-          <a href="/?card={e(c['id'])}">카탈로그에서 보기 · Open in catalog</a>
-          <a href="https://m.bunjang.co.kr/search/products?q={urllib.parse.quote('리프트바운드 ' + code)}" rel="nofollow noopener" target="_blank">번개장터에서 검색 ↗</a>
+          <a class="btn" href="/?card={e(c['id'])}">{icon("cards")}카탈로그에서 보기</a>
+          <a class="btn" href="https://m.bunjang.co.kr/search/products?q={urllib.parse.quote('리프트바운드 ' + code)}" rel="nofollow noopener" target="_blank">번개장터에서 검색{icon("arrow-up-right")}</a>
         </div>
         {rel}
-        <p class="note cardnav">{nav}</p>
+        <nav class="cardnav">{nav}</nav>
       </div>
     </div>
   </main>""" + foot(set_links)
@@ -287,11 +306,11 @@ def set_page(set_id, set_name, set_en, cards, bj, updated, set_links):
         return (f'<tr><td><a href="/card/{c["id"]}/">{e(short_code(c))}</a></td>'
                 f'<td><a href="/card/{c["id"]}/">{e(display_name(c))}</a>'
                 f'{"".join(f" <span class=tag>{w}</span>" for w in variant_words(c))}</td>'
-                f'<td>{e(c.get("rarityKo", ""))}</td>'
-                f'<td class="p">{won(p["median"]) if p else "–"}</td><td class="p">{p["n"] if p else ""}</td></tr>')
+                f'<td class="m-hide">{e(c.get("rarityKo", ""))}</td>'
+                f'<td class="p">{won(p["median"]) if p else "-"}</td><td class="p">{p["n"] if p else ""}</td></tr>')
 
     top = "".join(row(c) for c in priced[:10])
-    head_row = "<tr><th>코드</th><th>카드</th><th>희귀도</th><th class=p>중간값</th><th class=p>매물</th></tr>"
+    head_row = "<tr><th>코드</th><th>카드</th><th class=m-hide>희귀도</th><th class=p>중간값</th><th class=p>매물</th></tr>"
     crumbs, crumbs_ld = breadcrumbs([("홈", "/"), (f"{set_name} 시세", None)])
     image = f"{SITE}/{priced[0]['img']}" if priced else f"{SITE}/og.png"
     return head(title, desc, url, image, crumbs_ld) + f"""
@@ -316,13 +335,13 @@ def products_page(prices, hist, set_links):
     for pid, (ko, en) in names.items():
         p = products.get(pid)
         points = [(d, v[0]) for d, v in zip(hist["dates"], hist["cards"].get(pid, [])) if v]
-        index.append(f'<tr><td><a href="#{pid}">{e(ko)}</a></td><td class="p">{won(p["median"]) if p else "–"}</td>'
+        index.append(f'<tr><td><a href="#{pid}">{e(ko)}</a></td><td class="p">{won(p["median"]) if p else "-"}</td>'
                      f'<td class="p">{p["n"] if p else ""}</td></tr>')
         body = (stats_html(p) + (chart(points) if len(points) >= 2 else "")
                 + f'<table>{listing_rows(p["listings"])}</table>') if p else '<p class="note">현재 매물이 없습니다.</p>'
-        sections.append(f'<section id="{pid}"><h2>{e(ko)} <span class="en">{e(en)}</span></h2>{body}{sold_html(sold.get(pid))}</section>')
+        sections.append(f'<section class="product" id="{pid}"><h2>{e(ko)} <span class="en">{e(en)}</span></h2>{body}{sold_html(sold.get(pid))}</section>')
     crumbs, crumbs_ld = breadcrumbs([("홈", "/"), ("미개봉 상품 시세", None)])
-    return head(title, desc, f"{SITE}/products/", f"{SITE}/og.png", crumbs_ld) + f"""
+    return head(title, desc, f"{SITE}/products/", f"{SITE}/og.png", crumbs_ld, active="products") + f"""
   <main class="cardpage setpage">
     {crumbs}
     <h1>리프트바운드 미개봉 상품 시세</h1>
@@ -350,13 +369,13 @@ def movers_page(cards, prices, hist, set_links):
 
     first = hist["dates"][0] if hist["dates"] else datetime.date.today().isoformat()
     ready = (datetime.date.fromisoformat(first) + datetime.timedelta(days=7)).isoformat()
-    body = (f"<h2>이번 주 급등 카드</h2>{table(up) if up else '<p class=note>없음</p>'}"
-            f"<h2>이번 주 급락 카드</h2>{table(down) if down else '<p class=note>없음</p>'}") if rows else (
+    body = (f"<div class=\"movers\"><div><h2>이번 주 급등</h2>{table(up) if up else '<p class=note>없음</p>'}</div>"
+            f"<div><h2>이번 주 급락</h2>{table(down) if down else '<p class=note>없음</p>'}</div></div>") if rows else (
         f'<p class="note">시세 기록이 7일 이상 쌓이면 ({ready}부터) 이곳에 가격 변동이 큰 카드가 표시됩니다.</p>')
     title = "리프트바운드 카드 시세 급등·급락 | 이번 주 가격 변동 TOP 20"
     desc = "리프트바운드 카드 중 최근 7일 동안 번개장터 시세(중간값)가 가장 많이 오르고 내린 카드와 미개봉 상품."
     crumbs, crumbs_ld = breadcrumbs([("홈", "/"), ("급등·급락", None)])
-    return head(title, desc, f"{SITE}/movers/", f"{SITE}/og.png", crumbs_ld) + f"""
+    return head(title, desc, f"{SITE}/movers/", f"{SITE}/og.png", crumbs_ld, active="movers") + f"""
   <main class="cardpage setpage">
     {crumbs}
     <h1>리프트바운드 시세 급등·급락</h1>
@@ -396,7 +415,7 @@ def main():
                  for s, cs in by_set.items()}
     set_en = {s: collections.Counter(c.get("setNameEn") or c["setName"] for c in cs).most_common(1)[0][0]
               for s, cs in by_set.items()}
-    set_links = " · ".join(f'<a href="/set/{set_slug(s)}/">{e(set_names[s])}</a>' for s in by_set)
+    set_links = "".join(f'<a href="/set/{set_slug(s)}/">{e(set_names[s])}</a>' for s in by_set)
 
     by_champ = {}
     for c in cards:

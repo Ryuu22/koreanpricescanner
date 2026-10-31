@@ -11,7 +11,7 @@
     ko: {
       title: "덱 가격 계산기",
       intro: "한 줄에 카드 하나씩, 수량과 카드 코드 또는 카드 이름을 적으세요. 예: \"3 OGN-301\", \"OGN-039a x2\", \"2 뻔뻔한 해적\". 시세는 번개장터 호가의 중간값입니다.",
-      fromWatch: "관심 카드 불러오기", example: "예시 덱",
+      listLabel: "카드 목록", fromWatch: "관심 카드 불러오기", example: "예시 덱",
       card: "카드", qty: "수량", unit: "중간값", subtotal: "합계",
       total: (n) => `총 ${n}장`, median: "중간값 기준", lowest: "최저가 기준",
       noPrice: "시세 없음", soldPrice: "거래 추정",
@@ -21,7 +21,7 @@
     en: {
       title: "Deck calculator",
       intro: "One card per line: a quantity and the card code or name, e.g. \"3 OGN-301\", \"OGN-039a x2\", \"2 Brazen Buccaneer\". Prices are the median Bunjang asking price.",
-      fromWatch: "Load my watchlist", example: "Example deck",
+      listLabel: "Card list", fromWatch: "Load my watchlist", example: "Example deck",
       card: "Card", qty: "Qty", unit: "Median", subtotal: "Subtotal",
       total: (n) => `${n} cards`, median: "at median prices", lowest: "at lowest prices",
       noPrice: "No price", soldPrice: "est. sold",

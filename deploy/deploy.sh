@@ -24,7 +24,7 @@ setup)
 deploy)
     cd "$ROOT"
     rsync -a --chmod=D755,F644 --relative index.html privacy.html about.html calc.html app.js calc.js style.css \
-        ads.js robots.txt favicon.svg favicon.ico apple-touch-icon.png og.png \
+        ads.js icons.svg robots.txt favicon.svg favicon.ico apple-touch-icon.png og.png \
         scripts/build_catalog.py scripts/scrape_bunjang.py scripts/build_pages.py scripts/backup_data.sh "$HOST:$SITE/"
     rsync -a --chmod=D755,F644 --ignore-existing --relative data/cards.js data/prices.js img/ "$HOST:$SITE/"
     # Card pages use the page template from this deploy
