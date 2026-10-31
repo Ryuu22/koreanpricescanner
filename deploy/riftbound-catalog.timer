@@ -1,0 +1,9 @@
+[Unit]
+Description=Daily Riftbound card list refresh (picks up new sets)
+
+[Timer]
+OnCalendar=*-*-* 03:41:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target

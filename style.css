@@ -160,3 +160,7 @@ td img { width: 40px; height: 40px; object-fit: cover; border-radius: 4px; displ
   .stats { grid-template-columns: repeat(2, 1fr); }
   .controls select { flex: 1 1 40%; }
 }
+
+.ad { display: none; }
+.ad.on { display: flex; justify-content: center; margin: 4px 0 12px; min-height: 90px; }
+@media (max-width: 760px) { .ad.on { min-height: 100px; } }

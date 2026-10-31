@@ -1,0 +1,17 @@
+[Unit]
+Description=Refresh Riftbound prices from Bunjang
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=@DEPLOY_USER@
+WorkingDirectory=/srv/riftbound/site
+# Timestamps on the page are Korean time
+Environment=TZ=Asia/Seoul
+ExecStart=/usr/bin/python3 scripts/scrape_bunjang.py
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+ReadWritePaths=/srv/riftbound/site/data

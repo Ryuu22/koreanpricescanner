@@ -1,0 +1,16 @@
+[Unit]
+Description=Refresh the Riftbound card list and images
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=@DEPLOY_USER@
+WorkingDirectory=/srv/riftbound/site
+Environment=TZ=Asia/Seoul
+ExecStart=/usr/bin/python3 scripts/build_catalog.py
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+ReadWritePaths=/srv/riftbound/site/data /srv/riftbound/site/img
