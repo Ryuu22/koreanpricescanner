@@ -217,7 +217,7 @@ main { max-width: 1400px; margin: 0 auto; padding: 20px 24px 64px; }
   box-shadow: 0 2px 3px rgb(0 0 0 / .35); /* taste-skill-ignore: a paper sticker stands off the sleeve */
 }
 .tag-price .nm {
-  font-size: 13px; font-weight: 600; color: var(--ink-2); line-height: 1.3;
+  font-size: 15px; font-weight: 700; color: var(--ink); line-height: 1.3; letter-spacing: -0.01em;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .tag-price .star { color: var(--ink); }
@@ -225,7 +225,7 @@ main { max-width: 1400px; margin: 0 auto; padding: 20px 24px 64px; }
 .tag-price .price { font-size: 19px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; }
 .price small, .sticker-panel .lead small { font-size: .6em; font-weight: 700; margin: 0 1px; letter-spacing: 0; }
 .tag-price .none { font-size: 14px; font-weight: 600; color: #4f5257; line-height: 1.6; }
-.tag-price.empty { background: var(--sticker-2); }
+.tag-price.no-price { background: var(--sticker-2); }
 .tag-price .meta { font-size: 12px; color: #55585d; margin-top: 1px; font-variant-numeric: tabular-nums; }
 
 .star { width: 12px; height: 12px; display: inline-block; vertical-align: -1px; margin-right: 3px; }
@@ -468,6 +468,7 @@ section.product h2 { margin-top: 0; }
   .card::before { left: -6px; right: -6px; }
   .tag-price { margin: -20px 6px 0; padding: 6px 8px 7px; }
   .tag-price .price { font-size: 17px; }
+  .tag-price .nm { font-size: 14px; }
 
   dialog {
     width: 100%; max-width: 100%; max-height: 92dvh; margin: auto 0 0; padding: 20px 16px calc(24px + env(safe-area-inset-bottom));

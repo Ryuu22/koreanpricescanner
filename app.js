@@ -239,7 +239,7 @@
     // A card in its toploader with the shop's price sticker over the bottom of the sleeve.
     el.innerHTML = `
       <div class="sleeve"><div class="art"><img src="${c.img}" alt="${esc(nameOf(c))}" loading="lazy" width="744" height="1039"></div></div>
-      <div class="tag-price${p ? "" : " empty"}">
+      <div class="tag-price${p ? "" : " no-price"}">
         <div class="nm" title="${esc(nameOf(c))}">${watched.has(c.id) ? icon("star-fill", "star") : ""}${esc(nameOf(c))}</div>
         <div class="pr">${p ? `<span class="price">${tagWon(p.median)}</span>${p.chg7 ? pct(p.chg7) : ""}`
             : `<span class="none">${t.noPrice}</span>`}</div>
