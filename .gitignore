@@ -8,3 +8,6 @@ data/seen.json
 products/
 movers/
 .claude/settings.local.json
+.impeccable/review/
+.impeccable/decision-payload.json
+.taste-skill/

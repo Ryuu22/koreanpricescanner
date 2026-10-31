@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:390px;height:844px;overflow:hidden;background:#FFFFFF;color:#111827;font-family:"Noto Sans KR",sans-serif}
+.top{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid #E5E7EB}
+.top b{font-size:17px;font-weight:700}.top span{margin-left:auto;font-size:13px;color:#2563EB;font-weight:500}
+.search{margin:12px 16px 8px;background:#F3F4F6;border-radius:999px;padding:10px 16px;font-size:14px;color:#6B7280}
+.chips{display:flex;gap:6px;padding:0 16px 12px}
+.chips span{font-size:12.5px;border:1px solid #D1D5DB;border-radius:999px;padding:4px 11px;color:#374151}
+.chips .on{background:#2563EB;border-color:#2563EB;color:#fff}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 12px;padding:0 16px}
+.art{aspect-ratio:744/1039;border-radius:10px;background:linear-gradient(160deg,#5b3a6e,#c2475f)}
+.art.b{background:linear-gradient(160deg,#2f5d7c,#9fd0d6)}.art.c{background:linear-gradient(160deg,#6b4a22,#e0a95a)}.art.d{background:linear-gradient(160deg,#283a2e,#7fb08a)}
+.nm{font-size:14px;font-weight:500;margin-top:7px}.cd{font-size:11.5px;color:#6B7280}
+.p{font-size:16px;font-weight:700;margin-top:3px}
+.tabs{position:absolute;left:0;right:0;bottom:0;height:62px;background:#fff;border-top:1px solid #E5E7EB;display:grid;grid-template-columns:repeat(5,1fr)}
+.tabs div{color:#6B7280;font-size:10.5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.tabs i{width:20px;height:20px;border-radius:5px;border:2px solid currentColor}.tabs .on{color:#2563EB}
+</style></head><body>
+<div class="top"><b>리프트바운드 시세</b><span>EN</span></div>
+<div class="search">카드 검색</div>
+<div class="chips"><span class="on">전체</span><span>오리진</span><span>희귀도</span><span>시세 높은순</span></div>
+<div class="grid">
+  <div><div class="art"></div><div class="nm">난폭한 말괄량이</div><div class="cd">OGN-301</div><div class="p">70,000원</div></div>
+  <div><div class="art b"></div><div class="nm">꼬리 천 개 주시자</div><div class="cd">OGN-116</div><div class="p">19,000원</div></div>
+  <div><div class="art c"></div><div class="nm">카이사</div><div class="cd">OGN-039a</div><div class="p">50,000원</div></div>
+  <div><div class="art d"></div><div class="nm">무자비한 폭풍</div><div class="cd">OGN-300*</div><div class="p">650,000원</div></div>
+</div>
+<div class="tabs"><div class="on"><i></i>카드</div><div><i></i>미개봉</div><div><i></i>급등·급락</div><div><i></i>계산기</div><div><i></i>시세 안내</div></div>
+</body></html>

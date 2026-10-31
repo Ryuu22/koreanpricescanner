@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:390px;height:844px;overflow:hidden;background:#F3F4F1;color:#1E2228;font-family:"Noto Sans KR",sans-serif;font-feature-settings:"tnum"}
+.sign{background:#2B2F36;color:#fff;padding:14px 16px 12px;display:flex;align-items:center;gap:10px}
+.sign .ko{font-size:19px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.sign .en{font-size:11px;color:#B7BDC6;letter-spacing:.02em}
+.sign .lang{margin-left:auto;border:1.5px solid #fff;border-radius:999px;font-size:12px;font-weight:700;padding:3px 10px}
+.lines{display:flex;gap:6px;padding:10px 16px;background:#fff;border-bottom:1px solid #D9DCD6}
+.line{display:flex;align-items:center;gap:5px;font-size:12.5px;font-weight:700;border-radius:999px;padding:4px 10px 4px 4px;background:#F3F4F1}
+.dot{width:20px;height:20px;border-radius:50%;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.search{margin:12px 16px;background:#fff;border:2px solid #2B2F36;border-radius:10px;padding:10px 12px;font-size:14px;color:#6B7079}
+.count{display:flex;justify-content:space-between;padding:0 16px 8px;font-size:12px;color:#6B7079}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 10px;padding:0 16px}
+.card .art{aspect-ratio:744/1039;border-radius:8px;background:linear-gradient(160deg,#5b3a6e,#c2475f);position:relative}
+.card .art.b{background:linear-gradient(160deg,#2f5d7c,#9fd0d6)}
+.card .art.c{background:linear-gradient(160deg,#6b4a22,#e0a95a)}
+.card .art.d{background:linear-gradient(160deg,#283a2e,#7fb08a)}
+.stn{display:flex;align-items:center;gap:6px;margin-top:8px}
+.badge{min-width:44px;height:24px;border-radius:999px;border:3px solid #00A84D;background:#fff;font-size:11.5px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 6px}
+.badge.sfd{border-color:#EF7C1C}
+.nm{font-size:14px;font-weight:700;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nme{font-size:10.5px;color:#6B7079;margin-top:1px}
+.price{display:flex;align-items:baseline;justify-content:space-between;margin-top:5px;border-top:1px solid #D9DCD6;padding-top:5px}
+.price b{font-size:17px;font-weight:800;letter-spacing:-.02em}
+.up{color:#E4002B;font-size:11.5px;font-weight:700}.dn{color:#0068B7;font-size:11.5px;font-weight:700}
+.tabs{position:absolute;left:0;right:0;bottom:0;height:64px;background:#2B2F36;display:grid;grid-template-columns:repeat(5,1fr)}
+.tabs div{color:#B7BDC6;font-size:10.5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.tabs i{width:20px;height:20px;border-radius:5px;border:2px solid currentColor}
+.tabs .on{color:#fff;box-shadow:inset 0 3px 0 #00A84D}
+</style></head><body>
+<div class="sign"><div><div class="ko">리프트바운드 시세</div><div class="en">Riftbound Prices</div></div><div class="lang">EN</div></div>
+<div class="lines">
+  <span class="line"><span class="dot" style="background:#00A84D">O</span>오리진</span>
+  <span class="line"><span class="dot" style="background:#EF7C1C">S</span>스피릿포지드</span>
+  <span class="line"><span class="dot" style="background:#996CAC">U</span>언리시드</span>
+</div>
+<div class="search">카드명, 챔피언, 코드 검색 (징크스, OGN-301)</div>
+<div class="count"><span>카드 317장 · 시세 있음</span><span>업데이트 21:18</span></div>
+<div class="grid">
+  <div class="card"><div class="art"></div>
+    <div class="stn"><span class="badge">301</span><div><div class="nm">난폭한 말괄량이</div><div class="nme">Loose Cannon</div></div></div>
+    <div class="price"><b>70,000원</b><span class="up">▲ 8%</span></div></div>
+  <div class="card"><div class="art b"></div>
+    <div class="stn"><span class="badge">116</span><div><div class="nm">꼬리 천 개 주시자</div><div class="nme">Thousand-Tailed</div></div></div>
+    <div class="price"><b>19,000원</b><span class="dn">▼ 12%</span></div></div>
+  <div class="card"><div class="art c"></div>
+    <div class="stn"><span class="badge">039a</span><div><div class="nm">카이사</div><div class="nme">Kai'Sa</div></div></div>
+    <div class="price"><b>50,000원</b><span class="up">▲ 3%</span></div></div>
+  <div class="card"><div class="art d"></div>
+    <div class="stn"><span class="badge sfd">227*</span><div><div class="nm">Relentless Storm</div><div class="nme">SFD</div></div></div>
+    <div class="price"><b>650,000원</b><span class="dn">▼ 2%</span></div></div>
+</div>
+<div class="tabs"><div class="on"><i></i>카드</div><div><i></i>미개봉</div><div><i></i>급등·급락</div><div><i></i>계산기</div><div><i></i>시세 안내</div></div>
+</body></html>

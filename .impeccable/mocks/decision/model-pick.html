@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:390px;height:844px;overflow:hidden;background:#1C1D1F;color:#F2F2EE;font-family:"Noto Sans KR",sans-serif;font-feature-settings:"tnum"}
+.top{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid #34363A}
+.top b{font-size:18px;font-weight:900;letter-spacing:-.02em}
+.top span{margin-left:auto;font-size:12px;border:1px solid #55585E;border-radius:6px;padding:3px 9px}
+.search{margin:12px 16px;background:#2A2C30;border:1px solid #3C3F44;border-radius:8px;padding:10px 12px;font-size:14px;color:#8E9198}
+.shelf{display:grid;grid-template-columns:1fr 1fr;gap:22px 14px;padding:6px 16px}
+.tl{background:rgba(201,206,211,.12);border:1px solid rgba(201,206,211,.45);border-radius:6px;padding:7px}
+.art{aspect-ratio:744/1039;border-radius:3px;background:linear-gradient(160deg,#5b3a6e,#c2475f)}
+.art.b{background:linear-gradient(160deg,#2f5d7c,#9fd0d6)}.art.c{background:linear-gradient(160deg,#6b4a22,#e0a95a)}.art.d{background:linear-gradient(160deg,#283a2e,#7fb08a)}
+.sticker{margin:-14px 10px 0;position:relative;background:#FAFAF7;color:#1C1D1F;border-radius:4px;padding:6px 8px;box-shadow:0 2px 0 rgba(0,0,0,.35)}
+.sticker .n{font-size:11px;font-weight:700;color:#55585E}
+.sticker .p{font-size:20px;font-weight:900;color:#D7262B;letter-spacing:-.03em}
+.sticker .c{font-size:10px;color:#55585E}
+.glass{height:6px;margin:14px -16px 0;background:linear-gradient(#3C3F44,#25272A)}
+.tabs{position:absolute;left:0;right:0;bottom:0;height:62px;background:#141517;border-top:1px solid #34363A;display:grid;grid-template-columns:repeat(5,1fr)}
+.tabs div{color:#8E9198;font-size:10.5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.tabs i{width:20px;height:20px;border-radius:5px;border:2px solid currentColor}.tabs .on{color:#F2F2EE}
+</style></head><body>
+<div class="top"><b>리프트바운드 시세</b><span>EN</span></div>
+<div class="search">카드명, 챔피언, 코드 검색</div>
+<div class="shelf">
+  <div><div class="tl"><div class="art"></div></div><div class="sticker"><div class="n">난폭한 말괄량이</div><div class="p">70,000</div><div class="c">OGN-301 · 매물 3</div></div></div>
+  <div><div class="tl"><div class="art b"></div></div><div class="sticker"><div class="n">꼬리 천 개 주시자</div><div class="p">19,000</div><div class="c">OGN-116 · 매물 9</div></div></div>
+  <div><div class="tl"><div class="art c"></div></div><div class="sticker"><div class="n">카이사</div><div class="p">50,000</div><div class="c">OGN-039a · 매물 2</div></div></div>
+  <div><div class="tl"><div class="art d"></div></div><div class="sticker"><div class="n">무자비한 폭풍</div><div class="p">650,000</div><div class="c">OGN-300* · 매물 1</div></div></div>
+</div>
+<div class="glass"></div>
+<div class="tabs"><div class="on"><i></i>카드</div><div><i></i>미개봉</div><div><i></i>급등·급락</div><div><i></i>계산기</div><div><i></i>시세 안내</div></div>
+</body></html>

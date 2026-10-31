@@ -18,20 +18,9 @@
       unknown: "찾지 못한 줄", missing: (n) => `시세가 없는 카드 ${n}장은 합계에서 빠졌습니다.`,
       updated: (u) => `${u} 업데이트 기준`,
     },
-    en: {
-      title: "Deck calculator",
-      intro: "One card per line: a quantity and the card code or name, e.g. \"3 OGN-301\", \"OGN-039a x2\", \"2 Brazen Buccaneer\". Prices are the median Bunjang asking price.",
-      listLabel: "Card list", fromWatch: "Load my watchlist", example: "Example deck",
-      card: "Card", qty: "Qty", unit: "Median", subtotal: "Subtotal",
-      total: (n) => `${n} cards`, median: "at median prices", lowest: "at lowest prices",
-      noPrice: "No price", soldPrice: "est. sold",
-      unknown: "Lines not recognized", missing: (n) => `${n} cards without a price are not in the totals.`,
-      updated: (u) => `Prices as of ${u}`,
-    },
   };
-  let lang = "ko";
-  try { lang = localStorage.getItem("lang") || ""; } catch (_) { /* storage blocked */ }
-  if (!STRINGS[lang]) lang = (navigator.language || "").toLowerCase().startsWith("ko") ? "ko" : "en";
+  // Static pages are Korean; the bilingual toggle lives on the catalog only.
+  const lang = "ko";
   const t = STRINGS[lang];
   document.documentElement.lang = lang;
   for (const el of document.querySelectorAll("[data-i18n]")) el.textContent = t[el.dataset.i18n];
@@ -100,10 +89,12 @@
       </tr>`);
     }
     $("result").innerHTML = `
-      <div class="stats totals">
-        <div class="stat"><b>${won(median)}</b><span>${t.median}</span></div>
-        <div class="stat"><b>${won(lowest)}</b><span>${t.lowest}</span></div>
-        <div class="stat"><b>${count}</b><span>${t.total(count)}</span></div>
+      <div class="sticker-panel totals">
+        <div class="lead"><b>${won(median)}</b><span>${t.median}</span></div>
+        <dl>
+          <dt>${t.lowest}</dt><dd>${won(lowest)}</dd>
+          <dt>${t.qty}</dt><dd>${count}</dd>
+        </dl>
       </div>
       ${missing ? `<p class="note">${t.missing(missing)}</p>` : ""}
       ${PRICES.updated ? `<p class="note">${t.updated(esc(PRICES.updated))}</p>` : ""}

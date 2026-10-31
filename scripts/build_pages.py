@@ -38,16 +38,22 @@ TABS = [("cards", "/", "cards", "카드"), ("products", "/products/", "package",
         ("about", "/about.html", "info", "시세 안내")]
 CONTACT = "dan@torchsmith.com"
 TYPES = {"unit": "유닛", "spell": "주문", "legend": "전설", "gear": "장비", "battlefield": "전장", "rune": "룬"}
-DISCLAIMER = ("Riftbound Prices isn't endorsed by Riot Games and doesn't reflect the views or opinions of "
-              "Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, "
-              "and all associated properties are trademarks or registered trademarks of Riot Games, Inc. "
-              "번개장터·KREAM과 제휴 관계가 없습니다.")
+DISCLAIMER = ("리프트바운드 시세는 Riot Games의 보증을 받지 않았으며, Riot Games 또는 Riot Games 자산의 제작·관리에 공식적으로 관여하는 누구의 견해나 의견도 반영하지 않습니다. Riot Games 및 관련 모든 자산은 Riot Games, Inc.의 상표 또는 등록 상표입니다. 번개장터, KREAM과 제휴 관계가 없습니다.")
 
 e = html.escape
 
 
 def won(n):
     return f"{n:,}원"
+
+
+def tag_won(n):
+    """A price as a shop sticker prints it: the digits, with 원 set small."""
+    return f"{n:,}<small>원</small>"
+
+
+def rarity_ko(c):
+    return "쇼케이스" if c.get("rarityKo") == "Showcase" else c.get("rarityKo", "")
 
 
 def short_code(c):
@@ -174,14 +180,18 @@ def sold_html(s):
 
 
 def stats_html(p):
+    """The price sticker: the median as the shop would print it, the rest as figures beside it."""
+    chg = f'<div class="chgline">7일 변동 {chg_html(p["chg7"])}</div>' if p.get("chg7") else ""
     return f"""
-      <div class="stats">
-        <div class="stat"><b>{won(p['median'])}</b><span>중간값 · Median</span></div>
-        <div class="stat"><b>{won(p['min'])}</b><span>최저 · Lowest</span></div>
-        <div class="stat"><b>{won(p['max'])}</b><span>최고 · Highest</span></div>
-        <div class="stat"><b>{p['n']}</b><span>매물 · Listings</span></div>
-      </div>
-      {f'<p class="note">7일 변동: {chg_html(p["chg7"])}</p>' if p.get("chg7") else ""}"""
+      <div class="sticker-panel">
+        <div class="lead"><b>{tag_won(p['median'])}</b><span>중간값 · Median</span></div>
+        <dl>
+          <dt>최저</dt><dd>{won(p['min'])}</dd>
+          <dt>최고</dt><dd>{won(p['max'])}</dd>
+          <dt>매물</dt><dd>{p['n']}</dd>
+        </dl>
+        {chg}
+      </div>"""
 
 
 def chart(points):
@@ -227,7 +237,7 @@ def card_page(c, p, updated, history, prev_c, next_c, related, set_name, set_lin
     url = f"{SITE}/card/{c['id']}/"
     image = f"{SITE}/{c['img']}"
 
-    rarity, ctype = c.get("rarityKo", ""), TYPES.get(c["type"], "")
+    rarity, ctype = rarity_ko(c), TYPES.get(c["type"], "")
     about = (f"{e(c['name'])}{f'({e(name_en(c))})' if name_en(c) != c['name'] else ''}은(는) 리프트바운드 "
              f"{e(set_name)} 세트의 {e(rarity)} {e(ctype)} 카드입니다 (카드 번호 {e(c['code'])}"
              f"{', ' + e(' · '.join(words)) if words else ''}).")
@@ -253,8 +263,9 @@ def card_page(c, p, updated, history, prev_c, next_c, related, set_name, set_lin
                    f'넣지 않습니다.</p><table class="listings">{listing_rows(bundles, tags=False)}</table>')
 
     nav = "".join(
-        f'<a href="/card/{x["id"]}/">{arrow} {e(short_code(x))} {e(x["name"])}</a>' if x else "<span></span>"
-        for arrow, x in (("←", prev_c), ("→", next_c)))
+        (f'<a href="/card/{x["id"]}/">{icon("arrow-left")}{e(short_code(x))} {e(x["name"])}</a>' if arrow == "prev"
+         else f'<a href="/card/{x["id"]}/">{e(short_code(x))} {e(x["name"])}{icon("arrow-right")}</a>') if x else "<span></span>"
+        for arrow, x in (("prev", prev_c), ("next", next_c)))
     rel = ""
     if related:
         rel = "<h2>같은 챔피언 카드</h2><ul class=\"rel\">" + "".join(
@@ -274,12 +285,12 @@ def card_page(c, p, updated, history, prev_c, next_c, related, set_name, set_lin
   <main class="cardpage">
     {crumbs}
     <div class="detail">
-      <div class="d-art"><img src="/{e(c['img'])}" alt="리프트바운드 {e(c['name'])} {e(code)} 카드" width="744" height="1039"></div>
+      <div class="d-art"><div class="sleeve"><img src="/{e(c['img'])}" alt="리프트바운드 {e(c['name'])} {e(code)} 카드" width="744" height="1039"></div></div>
       <div>
         <h1>{e(display_name(c))}</h1>
         <div class="chips">{chips}</div>
         {artist}
-        <p class="about" style="margin-top:18px">{about}</p>
+        <p class="about">{about}</p>
         <h2>번개장터 시세·가격</h2>
         {prices}
         <div class="links">
@@ -306,10 +317,18 @@ def set_page(set_id, set_name, set_en, cards, bj, updated, set_links):
         return (f'<tr><td><a href="/card/{c["id"]}/">{e(short_code(c))}</a></td>'
                 f'<td><a href="/card/{c["id"]}/">{e(display_name(c))}</a>'
                 f'{"".join(f" <span class=tag>{w}</span>" for w in variant_words(c))}</td>'
-                f'<td class="m-hide">{e(c.get("rarityKo", ""))}</td>'
+                f'<td class="m-hide">{e(rarity_ko(c))}</td>'
                 f'<td class="p">{won(p["median"]) if p else "-"}</td><td class="p">{p["n"] if p else ""}</td></tr>')
 
-    top = "".join(row(c) for c in priced[:10])
+    # The top 10 stand on a shelf like the catalog: card art in its sleeve, the price on its sticker.
+    top = "".join(
+        f'<a class="card" href="/card/{c["id"]}/"><div class="sleeve"><div class="art">'
+        f'<img src="/{e(c["img"])}" alt="{e(c["name"])}" loading="lazy" width="744" height="1039"></div></div>'
+        f'<div class="tag-price"><div class="nm">{e(c["name"])}</div>'
+        f'<div class="pr"><span class="price">{tag_won(bj[c["id"]]["median"])}</span>'
+        f'{chg_html(bj[c["id"]]["chg7"]) if bj[c["id"]].get("chg7") else ""}</div>'
+        f'<div class="meta">{e(short_code(c))} · 매물 {bj[c["id"]]["n"]}</div></div></a>'
+        for c in priced[:10])
     head_row = "<tr><th>코드</th><th>카드</th><th class=m-hide>희귀도</th><th class=p>중간값</th><th class=p>매물</th></tr>"
     crumbs, crumbs_ld = breadcrumbs([("홈", "/"), (f"{set_name} 시세", None)])
     image = f"{SITE}/{priced[0]['img']}" if priced else f"{SITE}/og.png"
@@ -319,7 +338,7 @@ def set_page(set_id, set_name, set_en, cards, bj, updated, set_links):
     <h1>리프트바운드 {e(set_name)} 카드 시세</h1>
     <p class="about">{e(set_name)}({e(set_en)}) 세트의 카드 {len(cards)}장과 번개장터에서 판매 중인 매물 가격입니다.
       시세가 있는 카드는 {len(priced)}장이며, 가격은 판매 중인 매물 호가의 중간값입니다. {e(updated)} 업데이트.</p>
-    {f'<h2>{e(set_name)} 비싼 카드 TOP 10</h2><table class="list">{head_row}{top}</table>' if top else ""}
+    {f'<h2>{e(set_name)} 비싼 카드 TOP 10</h2><div class="grid">{top}</div>' if top else ""}
     <h2>{e(set_name)} 전체 카드 목록</h2>
     <table class="list">{head_row}{"".join(row(c) for c in cards)}</table>
   </main>""" + foot(set_links)

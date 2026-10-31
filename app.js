@@ -18,8 +18,8 @@
 
   const STRINGS = {
     ko: {
-      brand: "리프트바운드 시세", switchTo: "EN",
-      search: "카드명, 챔피언, 코드 검색 (징크스, Jinx, OGN-301)",
+      brand: "리프트바운드 시세", switchTo: "EN", pageTitle: "리프트바운드 카드 시세",
+      search: "카드명, 챔피언, 코드 검색 (징크스, Jinx, OGN-301)", searchShort: "카드명·챔피언·코드",
       filters: "필터", setLabel: "세트", rarityLabel: "희귀도", typeLabel: "유형", sortLabel: "정렬",
       showResults: (n) => `카드 ${n}장 보기`,
       allSets: "모든 세트", allRarities: "모든 희귀도", allTypes: "모든 유형",
@@ -28,6 +28,7 @@
       meta: (n, s, m, u) => `카드 ${n}장, 번개장터 매물 ${s}개 중 ${m}개 매칭. ${u} 업데이트.`,
       metaNoPrices: (n) => `카드 ${n}장. 아직 시세 데이터가 없습니다.`,
       count: (n) => `${n}장`,
+      listings: (n) => `매물 ${n}`,
       empty: "조건에 맞는 카드가 없습니다", emptyHint: "검색어나 필터를 바꿔 보세요.",
       emptyWatch: "관심 카드가 없습니다", emptyWatchHint: "카드를 열고 별표를 눌러 추가하세요.",
       noPrice: "시세 없음",
@@ -55,13 +56,14 @@
       listingsTitle: "판매 중인 매물",
       outlier: "통계 제외 (다른 매물과 가격 차이가 큼)",
       watchAdd: "관심 카드", watchRemove: "관심 카드",
+      prevCard: "이전 카드", nextCard: "다음 카드",
       navCards: "카드", navProducts: "미개봉 상품", navMovers: "급등·급락", navCalc: "덱 계산기", navAbout: "시세 안내",
       bySet: "세트별 시세",
       disclaimer: "리프트바운드 시세는 Riot Games의 보증을 받지 않았으며, Riot Games 또는 Riot Games 자산의 제작·관리에 공식적으로 관여하는 누구의 견해나 의견도 반영하지 않습니다. Riot Games 및 관련 모든 자산은 Riot Games, Inc.의 상표 또는 등록 상표입니다. 번개장터, KREAM과 제휴 관계가 없습니다.",
     },
     en: {
-      brand: "Riftbound Prices", switchTo: "한국어",
-      search: "Search card, champion or code (Jinx, 징크스, OGN-301)",
+      brand: "Riftbound Prices", switchTo: "한국어", pageTitle: "Riftbound card prices",
+      search: "Search card, champion or code (Jinx, 징크스, OGN-301)", searchShort: "Card, champion or code",
       filters: "Filters", setLabel: "Set", rarityLabel: "Rarity", typeLabel: "Type", sortLabel: "Sort",
       showResults: (n) => `Show ${n} cards`,
       allSets: "All sets", allRarities: "All rarities", allTypes: "All types",
@@ -70,6 +72,7 @@
       meta: (n, s, m, u) => `${n} cards, ${m} of ${s} Bunjang listings matched. Updated ${u}.`,
       metaNoPrices: (n) => `${n} cards. No price data yet.`,
       count: (n) => `${n} cards`,
+      listings: (n) => `${n} listing${n === 1 ? "" : "s"}`,
       empty: "No cards match", emptyHint: "Try a different search or fewer filters.",
       emptyWatch: "Your watchlist is empty", emptyWatchHint: "Open a card and tap the star to add it.",
       noPrice: "No price",
@@ -97,6 +100,7 @@
       listingsTitle: "Listings for sale",
       outlier: "Not in stats (far from the other prices)",
       watchAdd: "Watch", watchRemove: "Watching",
+      prevCard: "Previous card", nextCard: "Next card",
       navCards: "Cards", navProducts: "Sealed", navMovers: "Movers", navCalc: "Deck calc", navAbout: "How it works",
       bySet: "Prices by set",
       disclaimer: "Riftbound Prices isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc. Not affiliated with Bunjang or KREAM.",
@@ -116,10 +120,12 @@
 
   const pct = (n) => `<span class="chg ${n > 0 ? "up" : "down"}">${n > 0 ? "▲" : "▼"}${Math.abs(n)}%</span>`;
   const icon = (name, cls = "i") => `<svg class="${cls}" aria-hidden="true"><use href="icons.svg#${name}"/></svg>`;
+  // On a sticker the currency is printed small next to the digits, the way a shop label sets it.
+  const tagWon = (n) => lang === "ko" ? `${n.toLocaleString("ko-KR")}<small>원</small>` : `<small>₩</small>${n.toLocaleString("en-US")}`;
   const won = (n) => lang === "ko" ? n.toLocaleString("ko-KR") + "원" : "₩" + n.toLocaleString("en-US");
   const nameOf = (c) => lang === "ko" ? c.name : c.nameEn || c.name;
   const setNameOf = (c) => lang === "ko" ? c.setName : c.setNameEn || c.setName;
-  const rarityOf = (c) => lang === "ko" ? c.rarityKo : c.rarityEn || c.rarityKo;
+  const rarityOf = (c) => lang === "ko" ? (c.rarityKo === "Showcase" ? "쇼케이스" : c.rarityKo) : c.rarityEn || c.rarityKo;
   const champsOf = (c) => lang === "ko" ? c.champsKo : c.champs;
 
   // Precompute a normalized search string per card (both languages always searchable).
@@ -156,7 +162,7 @@
   function translate() {
     document.documentElement.lang = lang;
     for (const el of document.querySelectorAll("[data-i18n]")) el.textContent = t[el.dataset.i18n];
-    $("q").placeholder = t.search;
+    $("q").placeholder = matchMedia("(max-width: 768px)").matches ? t.searchShort : t.search;
     $("lang").textContent = t.switchTo;
     $("close").setAttribute("aria-label", t.close);
     $("filtersClose").setAttribute("aria-label", t.close);
@@ -230,17 +236,25 @@
     const el = document.createElement("button");
     el.className = "card";
     el.type = "button";
+    // A card in its toploader with the shop's price sticker over the bottom of the sleeve.
     el.innerHTML = `
-      <div class="art"><img src="${c.img}" alt="${esc(nameOf(c))}" loading="lazy" width="744" height="1039"></div>
-      <div class="name" title="${esc(nameOf(c))} ${esc(c.code)}">${watched.has(c.id) ? icon("star-fill", "star") : ""}${esc(nameOf(c))}</div>
-      <div class="row">${p ? `<span class="price">${won(p.median)}</span>${p.chg7 ? pct(p.chg7) : ""}`
-          : `<span class="none">${t.noPrice}</span>`}</div>`;
+      <div class="sleeve"><div class="art"><img src="${c.img}" alt="${esc(nameOf(c))}" loading="lazy" width="744" height="1039"></div></div>
+      <div class="tag-price${p ? "" : " empty"}">
+        <div class="nm" title="${esc(nameOf(c))}">${watched.has(c.id) ? icon("star-fill", "star") : ""}${esc(nameOf(c))}</div>
+        <div class="pr">${p ? `<span class="price">${tagWon(p.median)}</span>${p.chg7 ? pct(p.chg7) : ""}`
+            : `<span class="none">${t.noPrice}</span>`}</div>
+        <div class="meta">${esc(c.code.replace(/\/.*/, ""))}${p ? ` · ${t.listings(p.n)}` : ""}</div>
+      </div>`;
     el.addEventListener("click", () => openDetail(c));
     return el;
   }
 
   function openDetail(c) {
     const p = BJ[c.id];
+    // Neighbours in the current results: the popup steps through the showcase in order.
+    const idx = results.indexOf(c);
+    const prev = idx > 0 ? results[idx - 1] : null;
+    const next = idx >= 0 && idx < results.length - 1 ? results[idx + 1] : null;
     const query = `리프트바운드 ${c.code.replace(/\/.*/, "")}`;
     const kreamQuery = `리프트바운드 ${c.champsKo[0] || c.name}`;
     const bjSearch = `https://m.bunjang.co.kr/search/products?q=${encodeURIComponent(query)}`;
@@ -271,11 +285,19 @@
 
     $("detail-body").innerHTML = `
       <div class="detail">
-        <div class="d-art"><img src="${c.img}" alt="${esc(nameOf(c))}"></div>
+        <div class="d-art">
+          <div class="sleeve"><img src="${c.img}" alt="${esc(nameOf(c))}"></div>
+          ${p ? `<div class="tag-price d-tag"><div class="pr"><span class="price">${tagWon(p.median)}</span>${p.chg7 ? pct(p.chg7) : ""}</div>
+            <div class="meta">${t.median} · ${t.listings(p.n)}</div></div>` : ""}
+          <div class="d-nav">
+            <button class="btn" id="prevCard" type="button" ${prev ? "" : "disabled"} aria-label="${t.prevCard}">${icon("arrow-left")}${prev ? `<span class="nav-code">${esc(prev.code.replace(/\/.*/, ""))}</span>` : ""}</button>
+            <button class="btn" id="nextCard" type="button" ${next ? "" : "disabled"} aria-label="${t.nextCard}">${next ? `<span class="nav-code">${esc(next.code.replace(/\/.*/, ""))}</span>` : ""}${icon("arrow-right")}</button>
+          </div>
+        </div>
         <div>
           <div class="d-head">
             <div>
-              <h2>${esc(nameOf(c))}</h2>
+              <h2 id="detail-title">${esc(nameOf(c))}</h2>
               ${lang === "en" && c.name !== c.nameEn ? `<p class="alt-name">${esc(c.name)}</p>` : ""}
             </div>
             <button class="btn watch" id="watch" type="button"></button>
@@ -286,13 +308,15 @@
           <section class="sec">
             <div class="sec-head"><h3>${t.bunjang}</h3><span class="note">${PRICES.updated ? `${t.updated} ${esc(PRICES.updated)}` : ""}</span></div>
             ${p ? `
-              <div class="stats">
-                <div class="stat"><b>${won(p.median)}</b><span>${t.median}</span></div>
-                <div class="stat"><b>${won(p.min)}</b><span>${t.min}</span></div>
-                <div class="stat"><b>${won(p.max)}</b><span>${t.max}</span></div>
-                <div class="stat"><b>${p.n}</b><span>${t.count2}</span></div>
+              <div class="sticker-panel">
+                <div class="lead"><b>${tagWon(p.median)}</b><span>${t.median}</span></div>
+                <dl>
+                  <dt>${t.min}</dt><dd>${won(p.min)}</dd>
+                  <dt>${t.max}</dt><dd>${won(p.max)}</dd>
+                  <dt>${t.count2}</dt><dd>${p.n}</dd>
+                </dl>
+                ${p.chg7 != null ? `<div class="chgline">${t.chg7} ${p.chg7 ? pct(p.chg7) : "0%"}</div>` : ""}
               </div>
-              ${p.chg7 != null ? `<p class="note">${t.chg7} ${p.chg7 ? pct(p.chg7) : "0%"}</p>` : ""}
               ${soldBlock(c.id)}
               <div class="hist" id="hist"><h3>${t.history}</h3><p class="note">${t.historyLoading}</p></div>
               <p class="note">${t.priceNote} <a href="about.html">${t.navAbout}</a></p>`
@@ -310,13 +334,18 @@
       $("watch").innerHTML = icon(on ? "star-fill" : "star") + (on ? t.watchRemove : t.watchAdd);
     };
     paintWatch();
+    if (prev) $("prevCard").addEventListener("click", () => openDetail(prev));
+    if (next) $("nextCard").addEventListener("click", () => openDetail(next));
+    if (prev) new Image().src = prev.img;
+    if (next) new Image().src = next.img;
+    $("detail").scrollTop = 0;
     $("watch").addEventListener("click", () => {
       toggleWatch(c.id);
       paintWatch();
       if ($("watched").checked) apply();
       else refreshTile(c);
     });
-    if (!$("detail").open) $("detail").showModal();
+    if (!$("detail").open) { $("detail").showModal(); $("detail").focus(); }
     openCard = c.id;
     saveState();
     if (p) loadHistory(() => { if (openCard === c.id) drawHistory(c.id); });
@@ -433,6 +462,33 @@
   for (const id of ["set", "rarity", "type", "sort", "priced", "watched"]) $(id).addEventListener("change", apply);
   $("lang").addEventListener("click", () => setLang(lang === "ko" ? "en" : "ko"));
   $("close").addEventListener("click", () => $("detail").close());
+  // In the popup: arrow keys and a horizontal swipe step to the neighbouring card.
+  // Keyboard steps never animate; a quick flick counts even if it is short.
+  function step(dir) {
+    const c = CARDS.find((x) => x.id === openCard);
+    const i = results.indexOf(c);
+    const n = results[i + dir];
+    if (i >= 0 && n) openDetail(n);
+  }
+  $("detail").addEventListener("keydown", (e) => {
+    if (e.target.closest("input, textarea, select")) return;
+    if (e.key === "ArrowLeft") step(-1);
+    else if (e.key === "ArrowRight") step(1);
+  });
+  let swipe = null;
+  $("detail").addEventListener("pointerdown", (e) => {
+    if (e.pointerType !== "touch" || swipe) return;
+    swipe = { x: e.clientX, y: e.clientY, t: performance.now(), id: e.pointerId };
+  });
+  $("detail").addEventListener("pointerup", (e) => {
+    if (!swipe || e.pointerId !== swipe.id) return;
+    const dx = e.clientX - swipe.x, dy = e.clientY - swipe.y;
+    const velocity = Math.abs(dx) / (performance.now() - swipe.t);
+    swipe = null;
+    if (Math.abs(dx) > Math.abs(dy) * 1.5 && (Math.abs(dx) > 70 || velocity > 0.5)) step(dx < 0 ? 1 : -1);
+  });
+  $("detail").addEventListener("pointercancel", () => { swipe = null; });
+
   // Mobile: filters open as a bottom sheet
   const sheet = (open) => document.body.classList.toggle("sheet-open", open);
   $("filtersBtn").addEventListener("click", () => sheet(true));

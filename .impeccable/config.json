@@ -1,0 +1,62 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "undersized-ui-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-10-31T15:36:44.646Z",
+        "reason": "Claude: decision-round sketch (fixture), not shipped; the decision page renders sub-22px text as skeleton bars"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-10-31T15:36:44.658Z",
+        "reason": "Claude: decision-round sketch (fixture), not shipped; the decision page renders sub-22px text as skeleton bars"
+      },
+      {
+        "rule": "undersized-ui-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-10-31T15:36:44.670Z",
+        "reason": "Claude: decision-round sketch (fixture), not shipped; the decision page renders sub-22px text as skeleton bars"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-10-31T15:36:44.681Z",
+        "reason": "Claude: decision-round sketch (fixture), not shipped; the decision page renders sub-22px text as skeleton bars"
+      },
+      {
+        "rule": "undersized-ui-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-10-31T15:36:44.693Z",
+        "reason": "Claude: decision-round sketch (fixture), not shipped; the decision page renders sub-22px text as skeleton bars"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-10-31T15:36:44.706Z",
+        "reason": "Claude: decision-round sketch (fixture), not shipped; the decision page renders sub-22px text as skeleton bars"
+      }
+    ]
+  }
+}

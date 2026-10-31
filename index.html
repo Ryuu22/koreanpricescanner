@@ -79,7 +79,7 @@
   <main>
     <p class="stale" id="stale" hidden></p>
     <div class="ad" id="ad-top"></div>
-    <p class="count" id="count"></p>
+    <div class="title-row"><h1 data-i18n="pageTitle">리프트바운드 카드 시세</h1><p class="count" id="count"></p></div>
     <div class="grid" id="grid"></div>
     <div id="sentinel"></div>
   </main>
@@ -94,7 +94,7 @@
     </div>
   </footer>
 
-  <dialog id="detail">
+  <dialog id="detail" tabindex="-1" aria-labelledby="detail-title">
     <button class="close" id="close" type="button"><svg class="i" aria-hidden="true"><use href="icons.svg#x"/></svg></button>
     <div id="detail-body"></div>
   </dialog>

@@ -1,0 +1,579 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-31T15:41:15+00:00",
+  "title": "Design System: 리프트바운드 시세 (Riftbound Prices)",
+  "extensions": {
+    "colorMeta": {
+      "felt": {
+        "role": "neutral",
+        "displayName": "Showcase Felt",
+        "canonical": "#1b1c1e",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#242526",
+          "#414244",
+          "#606163",
+          "#818285",
+          "#a4a5a7",
+          "#c8c9cb",
+          "#eeeef0"
+        ]
+      },
+      "shelf": {
+        "role": "neutral",
+        "displayName": "Shelf",
+        "canonical": "#222427",
+        "tonalRamp": [
+          "#0a0b0c",
+          "#242527",
+          "#404245",
+          "#5f6165",
+          "#808286",
+          "#a3a5a8",
+          "#c8c9cb",
+          "#edeef0"
+        ]
+      },
+      "glass": {
+        "role": "neutral",
+        "displayName": "Glass",
+        "canonical": "#2a2c30",
+        "tonalRamp": [
+          "#0a0b0d",
+          "#242527",
+          "#404245",
+          "#5f6165",
+          "#808287",
+          "#a3a5a9",
+          "#c8c9cc",
+          "#edeef1"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Rule",
+        "canonical": "#36393e",
+        "tonalRamp": [
+          "#0a0b0d",
+          "#232528",
+          "#404246",
+          "#5e6166",
+          "#7f8288",
+          "#a2a5aa",
+          "#c7c9cd",
+          "#edeef1"
+        ]
+      },
+      "line-2": {
+        "role": "neutral",
+        "displayName": "Strong Rule",
+        "canonical": "#4a4d53",
+        "tonalRamp": [
+          "#0a0b0d",
+          "#232528",
+          "#404246",
+          "#5e6167",
+          "#7f8288",
+          "#a2a5aa",
+          "#c7c9cd",
+          "#edeef1"
+        ]
+      },
+      "text": {
+        "role": "neutral",
+        "displayName": "Text",
+        "canonical": "#ecece8",
+        "tonalRamp": [
+          "#0b0b0a",
+          "#252523",
+          "#424240",
+          "#61615e",
+          "#82827f",
+          "#a5a5a2",
+          "#c9c9c7",
+          "#eeeeed"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted",
+        "canonical": "#a4a6aa",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#242527",
+          "#414244",
+          "#606164",
+          "#818286",
+          "#a3a5a8",
+          "#c8c9cb",
+          "#edeef0"
+        ]
+      },
+      "faint": {
+        "role": "neutral",
+        "displayName": "Faint",
+        "canonical": "#8b8e93",
+        "tonalRamp": [
+          "#0a0b0d",
+          "#242527",
+          "#404245",
+          "#5f6166",
+          "#808287",
+          "#a3a5a9",
+          "#c7c9cc",
+          "#edeef1"
+        ]
+      },
+      "sleeve": {
+        "role": "neutral",
+        "displayName": "Sleeve Plastic",
+        "canonical": "rgb(214 220 226 / .07)",
+        "tonalRamp": [
+          "#0a0b0d",
+          "#232528",
+          "#3f4246",
+          "#5d6267",
+          "#7e8388",
+          "#a1a6aa",
+          "#c6c9cd",
+          "#eceff1"
+        ]
+      },
+      "sleeve-edge": {
+        "role": "neutral",
+        "displayName": "Sleeve Edge",
+        "canonical": "rgb(214 220 226 / .34)",
+        "tonalRamp": [
+          "#0a0b0d",
+          "#232528",
+          "#3f4246",
+          "#5d6267",
+          "#7e8388",
+          "#a1a6aa",
+          "#c6c9cd",
+          "#eceff1"
+        ]
+      },
+      "sticker": {
+        "role": "primary",
+        "displayName": "Sticker White",
+        "canonical": "#f5f5f2",
+        "tonalRamp": [
+          "#0b0b0a",
+          "#252524",
+          "#424240",
+          "#61615f",
+          "#828280",
+          "#a5a5a3",
+          "#c9c9c7",
+          "#eeeeed"
+        ]
+      },
+      "sticker-2": {
+        "role": "primary",
+        "displayName": "Faded Sticker",
+        "canonical": "#e4e5e1",
+        "tonalRamp": [
+          "#0b0b0a",
+          "#252524",
+          "#424240",
+          "#61625e",
+          "#82837f",
+          "#a5a5a2",
+          "#c9c9c7",
+          "#eeefed"
+        ]
+      },
+      "ink": {
+        "role": "primary",
+        "displayName": "Sticker Ink",
+        "canonical": "#18191b",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#242526",
+          "#414244",
+          "#606163",
+          "#818285",
+          "#a4a5a7",
+          "#c8c9cb",
+          "#eeeef0"
+        ]
+      },
+      "ink-2": {
+        "role": "primary",
+        "displayName": "Sticker Ink Soft",
+        "canonical": "#4b4e53",
+        "tonalRamp": [
+          "#0a0b0d",
+          "#242528",
+          "#404246",
+          "#5e6166",
+          "#7f8287",
+          "#a3a5a9",
+          "#c7c9cd",
+          "#edeef1"
+        ]
+      },
+      "up": {
+        "role": "secondary",
+        "displayName": "Up Red on Felt",
+        "canonical": "#ff6b60",
+        "tonalRamp": [
+          "#230000",
+          "#4d0103",
+          "#7b1414",
+          "#ac2a27",
+          "#d45148",
+          "#ef8075",
+          "#ffaea4",
+          "#ffdcd3"
+        ]
+      },
+      "down": {
+        "role": "secondary",
+        "displayName": "Down Blue on Felt",
+        "canonical": "#6aa6ff",
+        "tonalRamp": [
+          "#000924",
+          "#06234d",
+          "#18407a",
+          "#2c60ab",
+          "#4d82d1",
+          "#7aa7e9",
+          "#a7cbff",
+          "#d6f1ff"
+        ]
+      },
+      "up-ink": {
+        "role": "secondary",
+        "displayName": "Up Red on Sticker",
+        "canonical": "#d21f26",
+        "tonalRamp": [
+          "#260000",
+          "#520000",
+          "#820009",
+          "#b5111b",
+          "#de433f",
+          "#f8796f",
+          "#ffa99f",
+          "#ffd8d0"
+        ]
+      },
+      "down-ink": {
+        "role": "secondary",
+        "displayName": "Down Blue on Sticker",
+        "canonical": "#1a5fd0",
+        "tonalRamp": [
+          "#00062b",
+          "#002059",
+          "#0c3c8b",
+          "#1d5bc1",
+          "#407ee7",
+          "#70a4fd",
+          "#a0caff",
+          "#d0f0ff"
+        ]
+      },
+      "rarity-common": {
+        "role": "tertiary",
+        "displayName": "Common Tint",
+        "canonical": "#b3b1aa",
+        "tonalRamp": [
+          "#0c0b09",
+          "#262522",
+          "#43423e",
+          "#63615b",
+          "#84827c",
+          "#a6a5a0",
+          "#cac9c5",
+          "#efeeeb"
+        ]
+      },
+      "rarity-uncommon": {
+        "role": "tertiary",
+        "displayName": "Uncommon Tint",
+        "canonical": "#5fc6c9",
+        "tonalRamp": [
+          "#001011",
+          "#002d2f",
+          "#004d50",
+          "#007073",
+          "#329295",
+          "#6cb3b5",
+          "#9fd5d6",
+          "#d1f7f8"
+        ]
+      },
+      "rarity-rare": {
+        "role": "tertiary",
+        "displayName": "Rare Tint",
+        "canonical": "#ef8fb0",
+        "tonalRamp": [
+          "#1b020b",
+          "#3f1325",
+          "#672a41",
+          "#924360",
+          "#b76482",
+          "#d48da4",
+          "#f1b6c9",
+          "#ffe1ee"
+        ]
+      },
+      "rarity-epic": {
+        "role": "tertiary",
+        "displayName": "Epic Tint",
+        "canonical": "#eaa955",
+        "tonalRamp": [
+          "#180600",
+          "#3b1d00",
+          "#603700",
+          "#895300",
+          "#ad7525",
+          "#cb9b61",
+          "#e8c295",
+          "#ffe9c9"
+        ]
+      },
+      "rarity-showcase": {
+        "role": "tertiary",
+        "displayName": "Showcase Tint",
+        "canonical": "#bfa8f5",
+        "tonalRamp": [
+          "#0e061c",
+          "#291d40",
+          "#473768",
+          "#685393",
+          "#8975b7",
+          "#ab9ad3",
+          "#cdc1ef",
+          "#f1e9ff"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The median on the big sticker panel in card detail."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Card page and document titles; 24px on phones."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Catalog heading and popup card name on phones."
+      },
+      "price": {
+        "displayName": "Price",
+        "purpose": "The price on every shelf sticker; 17px on phones."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Running copy; documents cap at 70ch."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Card names on stickers, form labels, notes."
+      },
+      "meta": {
+        "displayName": "Meta",
+        "purpose": "Code and listing count, change percentages, axes, table heads."
+      }
+    },
+    "shadows": [
+      {
+        "name": "sleeve-edge",
+        "value": "inset 0 0 0 1px rgb(214 220 226 / .34), inset 0 5px 0 0 rgb(214 220 226 / .26)",
+        "purpose": "The toploader's clear edge and heavier top lip; draws plastic, not elevation."
+      },
+      {
+        "name": "sticker",
+        "value": "0 2px 3px rgb(0 0 0 / .35)",
+        "purpose": "A paper price sticker standing just off the sleeve."
+      },
+      {
+        "name": "hover-lift",
+        "value": "inset 0 0 0 1px rgb(214 220 226 / .6), inset 0 3px 0 0 rgb(214 220 226 / .22), 0 14px 24px -14px rgb(0 0 0 / .8)",
+        "purpose": "A card lifted 3px off its shelf; fine pointers only."
+      },
+      {
+        "name": "dialog",
+        "value": "0 30px 70px -20px rgb(0 0 0 / .85)",
+        "purpose": "The card popup floating over the dimmed case (backdrop rgb(8 9 10 / .74))."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(.23, 1, .32, 1)",
+        "purpose": "Presses (160ms), sleeve lift (250ms), desktop dialog entry (200ms)."
+      },
+      {
+        "name": "ease-drawer",
+        "value": "cubic-bezier(.32, .72, 0, 1)",
+        "purpose": "Filter sheet (320ms) and phone popup sheet (300ms)."
+      },
+      {
+        "name": "color-change",
+        "value": "150ms ease",
+        "purpose": "Tab, toggle and border colour changes."
+      },
+      {
+        "name": "press-scale",
+        "value": "scale(.97) buttons, scale(.98) cards, scale(.95) close",
+        "purpose": "Physical press feedback."
+      },
+      {
+        "name": "dialog-entry",
+        "value": "@starting-style opacity 0, translateY(10px) desktop / translateY(48px) phone",
+        "purpose": "Dialog rises into place on open."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "transition-duration .01ms, animation none",
+        "purpose": "All motion collapses under prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone",
+        "value": "768px"
+      },
+      {
+        "name": "narrow",
+        "value": "360px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Button",
+      "kind": "button",
+      "refersTo": "button",
+      "description": "Default glass button: secondary actions, links out, prev/next.",
+      "html": "<button class=\"ds-btn\"><svg class=\"ds-i\" viewBox=\"0 0 256 256\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"16\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polyline points=\"64 64 192 64 192 192\"/><line x1=\"64\" y1=\"192\" x2=\"192\" y2=\"64\"/></svg>번개장터에서 보기</button>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;gap:7px;font:600 14px/1.5 'Pretendard Variable',Pretendard,sans-serif;color:#ecece8;background:#2a2c30;border:1px solid #4a4d53;border-radius:4px;padding:8px 13px;cursor:pointer;transition:transform .16s cubic-bezier(.23,1,.32,1),border-color .15s ease}.ds-btn .ds-i{width:15px;height:15px;color:#a4a6aa}.ds-btn:hover{border-color:#a4a6aa}.ds-btn:active{transform:scale(.97)}.ds-btn:focus-visible{outline:2px solid #f5f5f2;outline-offset:2px}"
+    },
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "A sticker-white button for the one confirming action (filter sheet done).",
+      "html": "<button class=\"ds-btn-primary\">결과 보기</button>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;justify-content:center;font:800 15px/1.5 'Pretendard Variable',Pretendard,sans-serif;color:#18191b;background:#f5f5f2;border:1px solid #f5f5f2;border-radius:4px;padding:13px 24px;cursor:pointer;transition:transform .16s cubic-bezier(.23,1,.32,1)}.ds-btn-primary:active{transform:scale(.97)}.ds-btn-primary:focus-visible{outline:2px solid #f5f5f2;outline-offset:2px}"
+    },
+    {
+      "name": "Search Field",
+      "kind": "input",
+      "refersTo": "search-input",
+      "description": "Search set on sticker stock with ink caret.",
+      "html": "<label class=\"ds-search\"><svg class=\"ds-i\" viewBox=\"0 0 256 256\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"16\" stroke-linecap=\"round\"><circle cx=\"112\" cy=\"112\" r=\"80\"/><line x1=\"168.6\" y1=\"168.6\" x2=\"224\" y2=\"224\"/></svg><input placeholder=\"카드명, 챔피언, 코드 검색\"></label>",
+      "css": ".ds-search{position:relative;display:block;max-width:420px}.ds-search .ds-i{position:absolute;left:12px;top:50%;width:18px;height:18px;transform:translateY(-50%);color:#6f7277}.ds-search input{width:100%;box-sizing:border-box;font:15px/1.5 'Pretendard Variable',Pretendard,sans-serif;color:#18191b;caret-color:#18191b;background:#f5f5f2;border:0;border-radius:4px;padding:10px 14px 10px 38px}.ds-search input::placeholder{color:#6f7277}.ds-search input:focus-visible{outline:2px solid #f5f5f2;outline-offset:2px}"
+    },
+    {
+      "name": "Filter Toggle",
+      "kind": "chip",
+      "refersTo": "toggle",
+      "description": "Outlined toggle that becomes a sticker when checked.",
+      "html": "<span class=\"ds-toggles\"><button class=\"ds-toggle\" aria-pressed=\"false\">관심 카드</button><button class=\"ds-toggle\" aria-pressed=\"true\">시세 있는 카드</button></span>",
+      "css": ".ds-toggles{display:inline-flex;gap:6px}.ds-toggle{font:14px/1.5 'Pretendard Variable',Pretendard,sans-serif;color:#a4a6aa;background:none;border:1px solid #4a4d53;border-radius:4px;padding:7px 12px;cursor:pointer;transition:color .15s ease,background-color .15s ease,border-color .15s ease}.ds-toggle:hover{color:#ecece8;border-color:#a4a6aa}.ds-toggle[aria-pressed=true]{color:#18191b;background:#f5f5f2;border-color:#f5f5f2;font-weight:700}.ds-toggle:focus-visible{outline:2px solid #f5f5f2;outline-offset:2px}"
+    },
+    {
+      "name": "Header Tabs",
+      "kind": "nav",
+      "refersTo": "tab-active",
+      "description": "Muted tabs on felt; the current page is a sticker chip. On phones the same treatment sits in the bottom tab bar.",
+      "html": "<nav class=\"ds-tabs\"><a href=\"#\" aria-current=\"page\">카드</a><a href=\"#\">미개봉 상품</a><a href=\"#\">급등·급락</a><a href=\"#\">덱 계산기</a></nav>",
+      "css": ".ds-tabs{display:flex;gap:2px;background:#1b1c1e;padding:8px}.ds-tabs a{padding:7px 12px;border-radius:4px;color:#a4a6aa;text-decoration:none;font:500 14px/1.5 'Pretendard Variable',Pretendard,sans-serif;transition:color .15s ease,background-color .15s ease}.ds-tabs a:hover:not([aria-current]){color:#ecece8;background:#2a2c30}.ds-tabs a[aria-current=page]{color:#18191b;background:#f5f5f2;font-weight:700}.ds-tabs a:focus-visible{outline:2px solid #f5f5f2;outline-offset:2px}"
+    },
+    {
+      "name": "Rarity Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Outlined metadata chip; rarity chips take their tint for text and border.",
+      "html": "<span class=\"ds-chips\"><span class=\"ds-chip\">OGN-301/298</span><span class=\"ds-chip ds-epic\">에픽</span><span class=\"ds-chip ds-showcase\">쇼케이스</span></span>",
+      "css": ".ds-chips{display:inline-flex;gap:6px}.ds-chip{font:12.5px/1.5 'Pretendard Variable',Pretendard,sans-serif;color:#a4a6aa;border:1px solid #4a4d53;border-radius:4px;padding:2px 8px}.ds-epic{color:#eaa955;border-color:currentColor}.ds-showcase{color:#bfa8f5;border-color:currentColor}"
+    },
+    {
+      "name": "Shelf Card",
+      "kind": "card",
+      "refersTo": "price-sticker",
+      "description": "Signature: card in a toploader sleeve on a glass shelf, with the white price sticker over the bottom of the sleeve.",
+      "html": "<div class=\"ds-shelf\"><a class=\"ds-card\" href=\"#\"><div class=\"ds-sleeve\"><div class=\"ds-art\"></div></div><div class=\"ds-tag\"><div class=\"ds-nm\">난폭한 말괄량이</div><div class=\"ds-pr\"><span class=\"ds-price\">70,000<small>원</small></span><span class=\"ds-chg\">▲12%</span></div><div class=\"ds-meta\">OGN-301 · 매물 5</div></div></a></div>",
+      "css": ".ds-shelf{background:#1b1c1e;padding:20px 24px 24px}.ds-card{position:relative;isolation:isolate;display:flex;flex-direction:column;width:176px;text-decoration:none;font-family:'Pretendard Variable',Pretendard,sans-serif;transition:transform .16s cubic-bezier(.23,1,.32,1)}.ds-card::before{content:'';position:absolute;z-index:-1;left:-9px;right:-9px;bottom:-10px;height:34px;background:#2a2c30;border-top:1px solid #3a3d42}.ds-sleeve{padding:9px 6px 6px;border-radius:6px;background:rgb(214 220 226 / .07);box-shadow:inset 0 0 0 1px rgb(214 220 226 / .34),inset 0 5px 0 0 rgb(214 220 226 / .26);transition:transform .25s cubic-bezier(.23,1,.32,1),box-shadow .25s cubic-bezier(.23,1,.32,1)}.ds-art{aspect-ratio:744/1039;border-radius:3px;background:#222427}.ds-card:hover .ds-sleeve{transform:translateY(-3px);box-shadow:inset 0 0 0 1px rgb(214 220 226 / .6),inset 0 3px 0 0 rgb(214 220 226 / .22),0 14px 24px -14px rgb(0 0 0 / .8)}.ds-card:active{transform:scale(.98)}.ds-card:focus-visible{outline:none}.ds-card:focus-visible .ds-sleeve{box-shadow:inset 0 0 0 2px #f5f5f2}.ds-tag{position:relative;margin:-22px 8px 0;padding:7px 9px 8px;background:#f5f5f2;color:#18191b;border-radius:4px;box-shadow:0 2px 3px rgb(0 0 0 / .35)}.ds-nm{font-size:13px;font-weight:600;color:#4b4e53;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ds-pr{display:flex;align-items:baseline;justify-content:space-between;gap:6px}.ds-price{font-size:19px;font-weight:800;letter-spacing:-.02em;line-height:1.2;font-variant-numeric:tabular-nums}.ds-price small{font-size:.6em;font-weight:700;margin:0 1px;letter-spacing:0}.ds-chg{font-size:12px;font-weight:700;color:#d21f26;font-variant-numeric:tabular-nums}.ds-meta{font-size:12px;color:#55585d;font-variant-numeric:tabular-nums}"
+    },
+    {
+      "name": "Median Sticker Panel",
+      "kind": "custom",
+      "refersTo": "sticker-panel",
+      "description": "Signature: the big sticker in card detail, median in Display with low/high/listings beside it.",
+      "html": "<div class=\"ds-panel\"><div class=\"ds-lead\"><b>70,000<small>원</small></b><span>중간값</span></div><dl><dt>최저</dt><dd>50,000원</dd><dt>최고</dt><dd>90,000원</dd><dt>매물</dt><dd>5</dd></dl><div class=\"ds-chgline\"><span class=\"ds-down\">▼4%</span> 7일 변동</div></div>",
+      "css": ".ds-panel{display:grid;grid-template-columns:auto 1fr;gap:0 22px;align-items:center;background:#f5f5f2;color:#18191b;border-radius:4px;padding:14px 18px;font-family:'Pretendard Variable',Pretendard,sans-serif;max-width:560px}.ds-lead b{display:block;font-size:32px;font-weight:800;letter-spacing:-.03em;line-height:1.1;font-variant-numeric:tabular-nums}.ds-lead small{font-size:.6em;font-weight:700;margin:0 1px;letter-spacing:0}.ds-lead span{font-size:12.5px;color:#4b4e53}.ds-panel dl{display:grid;grid-template-columns:repeat(3,auto);justify-content:end;gap:2px 22px;margin:0}.ds-panel dt{font-size:12px;color:#4b4e53;text-align:right}.ds-panel dd{margin:0;font-size:16px;font-weight:700;text-align:right;font-variant-numeric:tabular-nums;grid-row:2}.ds-chgline{grid-column:1/-1;margin-top:8px;padding-top:8px;border-top:1px solid #e4e5e1;font-size:13px;color:#4b4e53}.ds-down{color:#1a5fd0;font-weight:700}"
+    },
+    {
+      "name": "Bottom Tab Bar",
+      "kind": "nav",
+      "refersTo": "bottom-tab-bar",
+      "description": "Phone navigation: shelf-toned fixed bar, five cells, active cell is a sticker chip.",
+      "html": "<nav class=\"ds-bottom\"><a href=\"#\" aria-current=\"page\"><span class=\"ds-ic\"></span>카드</a><a href=\"#\"><span class=\"ds-ic\"></span>미개봉</a><a href=\"#\"><span class=\"ds-ic\"></span>급등·급락</a><a href=\"#\"><span class=\"ds-ic\"></span>계산기</a><a href=\"#\"><span class=\"ds-ic\"></span>안내</a></nav>",
+      "css": ".ds-bottom{display:grid;grid-template-columns:repeat(5,1fr);padding:4px;background:#222427;border-top:1px solid #36393e;max-width:390px}.ds-bottom a{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px 5px;margin:2px;border-radius:4px;color:#a4a6aa;text-decoration:none;font:500 11px/1.5 'Pretendard Variable',Pretendard,sans-serif}.ds-ic{width:22px;height:22px;border:1.5px solid currentColor;border-radius:3px;box-sizing:border-box}.ds-bottom a[aria-current=page]{background:#f5f5f2;color:#18191b;font-weight:700}.ds-bottom a:focus-visible{outline:2px solid #f5f5f2;outline-offset:2px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Card Shop Showcase",
+    "overview": "The site is a Korean card shop's glass display case. The ground is the charcoal felt of the case; every card stands in a clear toploader sleeve on a glass shelf; and every price is a small white printed sticker pressed over the bottom of the sleeve, in near-black ink, exactly as a shop would price its wall. A trader recognises the wall, reads the sticker, and trusts it because the sticker also says how it was priced (median, listing count, update time).\n\nThe world is dense and quick to scan: card art is the hero, the number is the loudest type on any surface, and everything else (filters, metadata, method) is quiet grey on felt. There is one bright material besides the art, the sticker white, and it does double duty: it carries prices and it marks whatever is currently selected. Colour beyond that is reserved for meaning: red and blue for price movement (Korean convention), and a muted per-rarity text tint.\n\nSurfaces are flat fills stepped by tone, not lit. No gradients, no glows, no gold. Depth comes from three physical facts only: the sticker sits on top of the sleeve, a hovered card lifts off its shelf, and the card popup floats over the case.",
+    "keyCharacteristics": [
+      "Felt-charcoal ground with shelf and glass tone steps instead of shadows.",
+      "Cards framed in translucent toploader sleeves with a heavier top lip.",
+      "White price stickers in near-black ink for every price; the same sticker white marks the active state.",
+      "Red/blue only for price movement, always paired with ▲/▼.",
+      "Pretendard Variable throughout, tabular figures on every number.",
+      "Two radii only: sleeves 6px, stickers and controls 4px."
+    ],
+    "rules": [
+      {
+        "name": "The Sticker Is the Accent Rule",
+        "body": "The only \"accent\" is sticker white. Selected, active, pressed and primary states become a white sticker with near-black ink; there is no brand hue, and no second highlight colour is introduced for state.",
+        "section": "colors"
+      },
+      {
+        "name": "The Movement-Only Rule",
+        "body": "Red and blue mean price up and price down and nothing else, always accompanied by ▲ or ▼ (never colour alone), using the felt pair on charcoal and the ink pair on stickers.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tabular Rule",
+        "body": "Every number (prices, counts, percentages, dates, axes) is set with tabular figures so columns and stickers align digit for digit; totals and price columns are right-aligned.",
+        "section": "typography"
+      },
+      {
+        "name": "The Small Won Rule",
+        "body": "On a sticker the currency is set small: 원 after the digits in Korean, ₩ before them in English, at 0.6em and weight 700, so the digits carry the price. Plain-text contexts (tables, titles) print the full \"원\" inline.",
+        "section": "typography"
+      },
+      {
+        "name": "The Three Shadows Rule",
+        "body": "Sticker, hover lift, dialog. A new shadow needs a physical reason of the same kind; panels, buttons, tabs and the toolbar stay flat.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do put every price on a sticker: sticker white (#f5f5f2) stock, ink (#18191b) digits in weight 800, small 원/₩ at 0.6em.",
+      "Do mark selection by turning the control into a sticker (white fill, ink text, bolder weight); this is the only active-state treatment.",
+      "Do pair every red or blue change with ▲ or ▼, and use the ink pair (#d21f26 / #1a5fd0) on stickers, the felt pair (#ff6b60 / #6aa6ff) on charcoal.",
+      "Do build depth from felt, shelf and glass tone steps and 1px rules before reaching for a shadow.",
+      "Do present card art in a toploader sleeve (6px radius, inset edge, heavier top lip) standing on a glass shelf band.",
+      "Do set every number in tabular figures and right-align price and total columns.",
+      "Do gate hover effects to `(hover: hover) and (pointer: fine)`, give presses a 0.97-0.98 scale, and honour reduced motion."
+    ],
+    "donts": [
+      "Don't bring back the old dark-and-gold collector look: no gold, brass or yellow accents, no foil or metallic treatments.",
+      "Don't use gradients, glows, neon edges, coloured shadows or text shadows; fills are flat.",
+      "Don't use pill shapes or radii beyond 6px; controls are 4px, sleeves 6px.",
+      "Don't use red or blue for anything except price movement (not links, badges, errors, language tags or brand), and never as the only signal.",
+      "Don't drift toward a fintech or crypto dashboard: no KPI tiles, sparkline cards, ticker strips or green/red trading colours.",
+      "Don't drift toward a generic shop template: no white product grid, cart-style buttons, star ratings or \"sale\" badges; the felt case and stickers are the frame.",
+      "Don't add a new shadow outside sticker, hover lift and dialog, or a second accent hue for state."
+    ]
+  }
+}
