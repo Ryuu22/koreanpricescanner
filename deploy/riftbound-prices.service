@@ -10,8 +10,9 @@ WorkingDirectory=/srv/riftbound/site
 # Timestamps on the page are Korean time
 Environment=TZ=Asia/Seoul
 ExecStart=/usr/bin/python3 scripts/scrape_bunjang.py
+ExecStart=/usr/bin/python3 scripts/build_pages.py
 NoNewPrivileges=yes
 ProtectSystem=strict
 ProtectHome=yes
 PrivateTmp=yes
-ReadWritePaths=/srv/riftbound/site/data
+ReadWritePaths=/srv/riftbound/site

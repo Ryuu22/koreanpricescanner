@@ -1,5 +1,6 @@
 // Riftbound KR price catalog. Plain JS, no build step.
-// Data comes from data/cards.js (window.CARDS) and data/prices.js (window.PRICES).
+// Data comes from data/cards.js (window.CARDS) and data/prices.js (window.PRICES);
+// data/history.js (window.HISTORY) is loaded when a card is first opened.
 (function () {
   "use strict";
 
@@ -7,6 +8,7 @@
   const PRICES = window.PRICES || { bunjang: {} };
   const BJ = PRICES.bunjang || {};
   const PAGE = 120;
+  const STALE_HOURS = 24;
 
   const RARITY_ORDER = ["common", "uncommon", "rare", "epic", "showcase"];
   const VARIANT_WORDS = { alt: "alt 대체일러 알트 얼터", signature: "signature 시그니처 사인 오버넘버" };
@@ -34,6 +36,13 @@
       kreamNote: "KREAM은 자동 수집을 차단하므로 바로가기 링크만 제공합니다.",
       searchKream: "KREAM에서 검색 ↗",
       close: "닫기",
+      stale: (h) => `시세가 ${h}시간 동안 업데이트되지 않았습니다. 실제 시세와 다를 수 있습니다.`,
+      history: "시세 추이 (중간값)",
+      historyLoading: "불러오는 중…",
+      historyShort: (d) => `${d}부터 시세를 기록하고 있습니다. 며칠 뒤에 추이를 볼 수 있습니다.`,
+      chg7: "7일 변동",
+      privacy: "개인정보처리방침",
+      disclaimer: "Riftbound KR Prices는 Riot Games의 보증을 받지 않았으며, Riot Games 또는 Riot Games 자산의 제작·관리에 공식적으로 관여하는 누구의 견해나 의견도 반영하지 않습니다. Riot Games 및 관련 모든 자산은 Riot Games, Inc.의 상표 또는 등록 상표입니다. 번개장터·KREAM과 제휴 관계가 없습니다.",
     },
     en: {
       switchTo: "한국어",
@@ -57,6 +66,13 @@
       kreamNote: "KREAM blocks automated access, so only a search link is provided.",
       searchKream: "Search on KREAM ↗",
       close: "Close",
+      stale: (h) => `Prices haven't updated in ${h} hours and may be out of date.`,
+      history: "Price history (median)",
+      historyLoading: "Loading…",
+      historyShort: (d) => `Price history is recorded since ${d}. Check back in a few days for a trend.`,
+      chg7: "7-day change",
+      privacy: "Privacy policy",
+      disclaimer: "Riftbound KR Prices isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc. Not affiliated with Bunjang or KREAM.",
     },
   };
 
@@ -71,6 +87,7 @@
   if (!STRINGS[lang]) lang = "en";
   let t = STRINGS[lang];
 
+  const pct = (n) => `<span class="chg ${n > 0 ? "up" : "down"}">${n > 0 ? "▲" : "▼"}${Math.abs(n)}%</span>`;
   const won = (n) => lang === "ko" ? n.toLocaleString("ko-KR") + "원" : "₩" + n.toLocaleString("en-US");
   const nameOf = (c) => lang === "ko" ? c.name : c.nameEn || c.name;
   const setNameOf = (c) => lang === "ko" ? c.setName : c.setNameEn || c.setName;
@@ -113,6 +130,15 @@
     $("meta").textContent = PRICES.updated
       ? t.meta(CARDS.length, PRICES.scanned, PRICES.matched, PRICES.updated)
       : t.metaNoPrices(CARDS.length);
+    const age = pricesAgeHours();
+    $("stale").hidden = !(age >= STALE_HOURS);
+    $("stale").textContent = age >= STALE_HOURS ? t.stale(Math.floor(age)) : "";
+  }
+
+  // Older prices.js files only have "updated" (Korean time, no zone).
+  function pricesAgeHours() {
+    const at = Date.parse(PRICES.updatedAt || (PRICES.updated || "").replace(" ", "T") + ":00+09:00");
+    return isNaN(at) ? null : (Date.now() - at) / 3600e3;
   }
 
   function apply() {
@@ -157,7 +183,7 @@
       <img src="${c.img}" alt="${esc(nameOf(c))}" loading="lazy" width="744" height="1039">
       <div class="name">${esc(nameOf(c))}</div>
       <div class="sub"><span>${esc(c.code)}</span><span class="rar ${c.rarity}">${esc(rarityOf(c))}</span></div>
-      ${p ? `<div class="sub"><span class="price">${won(p.median)}</span><span>${t.listings(p.n)}</span></div>`
+      ${p ? `<div class="sub"><span class="price">${won(p.median)}${p.chg7 ? " " + pct(p.chg7) : ""}</span><span>${t.listings(p.n)}</span></div>`
           : `<div class="price none">${t.noPrice}</div>`}`;
     el.addEventListener("click", () => openDetail(c));
     return el;
@@ -204,6 +230,8 @@
               <div class="stat"><b>${won(p.max)}</b><span>${t.max}</span></div>
               <div class="stat"><b>${p.n}</b><span>${t.count2}</span></div>
             </div>
+            ${p.chg7 != null ? `<p class="note">${t.chg7}: ${p.chg7 ? pct(p.chg7) : "0%"}</p>` : ""}
+            <div class="hist" id="hist"><h3>${t.history}</h3><p class="note">${t.historyLoading}</p></div>
             <p class="note">${t.priceNote}</p>
             <table>${rows}</table>`
           : `<p class="note">${t.noListings}</p>`}
@@ -217,6 +245,53 @@
     if (!$("detail").open) $("detail").showModal();
     openCard = c.id;
     saveState();
+    if (p) loadHistory(() => { if (openCard === c.id) drawHistory(c.id); });
+  }
+
+  // history.js is only needed in the detail view, so it's loaded on first use
+  // (a script tag rather than fetch, which keeps the page working from file://).
+  let historyState = window.HISTORY ? "ready" : "";
+  const historyWaiting = [];
+  function loadHistory(done) {
+    if (historyState === "ready" || historyState === "failed") return done();
+    historyWaiting.push(done);
+    if (historyState === "loading") return;
+    historyState = "loading";
+    const s = document.createElement("script");
+    s.src = `data/history.js?v=${encodeURIComponent(PRICES.updatedAt || PRICES.updated || "")}`;
+    const finish = (state) => () => { historyState = state; historyWaiting.splice(0).forEach((f) => f()); };
+    s.onload = finish("ready");
+    s.onerror = finish("failed");
+    document.head.appendChild(s);
+  }
+
+  function drawHistory(id) {
+    const box = $("hist");
+    const H = window.HISTORY;
+    if (!box) return;
+    if (!H || !H.cards[id]) { box.remove(); return; }
+    const pts = H.cards[id].map((v, i) => v && { date: H.dates[i], median: v[0] }).filter(Boolean);
+    if (pts.length < 2) {
+      box.innerHTML = `<h3>${t.history}</h3><p class="note">${t.historyShort(esc(H.dates[0]))}</p>`;
+      return;
+    }
+    const W = 600, HT = 150, PAD = 6;
+    const vals = pts.map((p) => p.median);
+    const lo = Math.min(...vals), hi = Math.max(...vals), span = hi - lo || 1;
+    const day = (d) => Date.parse(d) / 864e5;
+    const d0 = day(pts[0].date), dspan = day(pts[pts.length - 1].date) - d0 || 1;
+    const x = (p) => (PAD + (day(p.date) - d0) / dspan * (W - 2 * PAD)).toFixed(1);
+    const y = (p) => (PAD + (1 - (p.median - lo) / span) * (HT - 2 * PAD)).toFixed(1);
+    const line = pts.map((p) => `${x(p)},${y(p)}`).join(" ");
+    const dots = pts.map((p) =>
+      `<circle cx="${x(p)}" cy="${y(p)}" r="3"><title>${esc(p.date)}: ${won(p.median)}</title></circle>`).join("");
+    box.innerHTML = `
+      <h3>${t.history}</h3>
+      <svg viewBox="0 0 ${W} ${HT}" role="img" aria-label="${t.history}">
+        <polygon class="area" points="${x(pts[0])},${HT} ${line} ${x(pts[pts.length - 1])},${HT}"></polygon>
+        <polyline points="${line}"></polyline>${dots}
+      </svg>
+      <div class="axis"><span>${esc(pts[0].date)}</span><span>${won(lo)} – ${won(hi)}</span><span>${esc(pts[pts.length - 1].date)}</span></div>`;
   }
 
   function setLang(next) {

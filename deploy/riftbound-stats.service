@@ -1,0 +1,12 @@
+[Unit]
+Description=Riftbound visitor stats from the Apache logs (GoAccess)
+
+[Service]
+Type=oneshot
+# Root, because the Apache logs are only readable by root/adm. Output stays outside the site.
+ExecStart=/bin/sh -c 'zcat -f /var/log/apache2/riftbound-access.log* | goaccess - --log-format=COMBINED --ignore-crawlers --no-progress -o /srv/riftbound/stats/index.html.tmp && chmod 644 /srv/riftbound/stats/index.html.tmp && mv /srv/riftbound/stats/index.html.tmp /srv/riftbound/stats/index.html'
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+ReadWritePaths=/srv/riftbound/stats

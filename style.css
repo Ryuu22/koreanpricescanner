@@ -127,7 +127,7 @@ dialog::backdrop { background: rgb(0 0 0 / .55); }
 }
 
 .detail { display: grid; grid-template-columns: 300px 1fr; gap: 20px; }
-.detail img { width: 100%; border-radius: 10px; }
+.detail img { width: 100%; height: auto; border-radius: 10px; }
 .detail h2 { margin: 0 0 4px; font-size: 22px; }
 .detail .facts { color: var(--muted); font-size: 13px; margin: 0 0 14px; }
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 10px 0 14px; }
@@ -148,7 +148,7 @@ table { width: 100%; border-collapse: collapse; font-size: 13px; }
 td { padding: 6px 4px; border-top: 1px solid var(--line); vertical-align: middle; }
 td.p { font-weight: 600; text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
 td a { color: inherit; }
-td img { width: 40px; height: 40px; object-fit: cover; border-radius: 4px; display: block; }
+.detail td img, td img { width: 40px; height: 40px; object-fit: cover; border-radius: 4px; display: block; }
 .tag { font-size: 11px; padding: 1px 5px; border-radius: 4px; background: var(--bg); color: var(--muted); margin-right: 3px; }
 .tag.kr { background: #e6f2ff; color: #0b5cad; }
 @media (prefers-color-scheme: dark) { .tag.kr { background: #11294a; color: #8cc4ff; } }
@@ -164,3 +164,41 @@ td img { width: 40px; height: 40px; object-fit: cover; border-radius: 4px; displ
 .ad { display: none; }
 .ad.on { display: flex; justify-content: center; margin: 4px 0 12px; min-height: 90px; }
 @media (max-width: 760px) { .ad.on { min-height: 100px; } }
+
+.stale {
+  margin: 10px 0 0; padding: 6px 10px; border-radius: 8px; font-size: 13px;
+  background: #fff4d6; color: #7a5200;
+}
+@media (prefers-color-scheme: dark) { .stale { background: #3a2c08; color: #f5cf6b; } }
+
+.chg { font-size: 11px; font-weight: 600; white-space: nowrap; }
+.chg.up { color: var(--accent); }
+.chg.down { color: #2f6fd6; }
+
+.hist { margin: 14px 0 6px; }
+.hist h3 { margin: 0 0 6px; font-size: 14px; }
+.hist svg { width: 100%; height: auto; display: block; background: var(--bg); border-radius: 8px; }
+.hist polyline { fill: none; stroke: var(--price); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.hist .area { fill: color-mix(in srgb, var(--price) 14%, transparent); }
+.hist circle { fill: var(--price); }
+.hist .axis { display: flex; justify-content: space-between; color: var(--muted); font-size: 11px; margin-top: 4px; font-variant-numeric: tabular-nums; }
+
+.foot {
+  max-width: 1400px; margin: 0 auto; padding: 20px 16px 40px;
+  border-top: 1px solid var(--line); color: var(--muted); font-size: 12px;
+}
+.foot p { margin: 0 0 6px; }
+.foot a { color: inherit; }
+
+.home { color: inherit; text-decoration: none; }
+.doc { max-width: 760px; }
+.doc h2 { margin: 18px 0 4px; }
+.doc h3 { margin: 22px 0 6px; font-size: 16px; }
+.doc p { margin: 0 0 8px; }
+.doc hr { border: 0; border-top: 1px solid var(--line); margin: 36px 0 12px; }
+.rel { margin: 6px 0 10px; padding-left: 18px; font-size: 13px; columns: 2; }
+.rel a, .cardnav a { color: inherit; }
+.cardnav { margin-top: 14px; }
+@media (max-width: 680px) { .rel { columns: 1; } }
+.cardpage { max-width: 1100px; }
+.cardpage .stat, .cardpage .hist svg { background: var(--surface); }
